@@ -3,11 +3,11 @@ import { Box, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import '../assets/css/effects.css';
 //IMAGENES
-import BG1 from '../assets/img/map/background1.png';
-import BG2 from '../assets/img/map/background2.png';
-import BG3 from '../assets/img/map/background3.png';
-import BG4 from '../assets/img/map/background4.png';
-import FLOOR from '../assets/img/map/floor.png';
+import BG1 from '../assets/img/map/background1_stage2.png';
+import BG2 from '../assets/img/map/background2_stage2.png';
+import BG3 from '../assets/img/map/background3_stage2.png';
+import BG4 from '../assets/img/map/background4_stage2.png';
+import FLOOR from '../assets/img/map/floor_stage2.png';
 import PIPEOUT from '../assets/img/map/pipe.png';
 //BOXES
 import BOX from '../assets/img/map/decorations/InfoBox.png';
@@ -22,7 +22,6 @@ import obst1 from '../assets/img/map/obst1.png';
 import obst2 from '../assets/img/map/obst2.png';
 import obst3 from '../assets/img/map/obst3.png';
 import obst4 from '../assets/img/map/obst4.png';
-import obst5 from '../assets/img/map/obst5.png';
 //PLAYER
 import idle from '../assets/img/player/idle.png';
 import right from '../assets/img/player/right.png';
@@ -74,7 +73,7 @@ const useTypewriter = (text, speed = 50, delay = 800) => {
 };
 
 
-function Stage1() {
+function Stage2() {
   const [fadeIn, setFadeIn] = useState(false);
   const posX = useRef(50);
   const posY = useRef(window.innerHeight - groundHeight - playerHeight);
@@ -99,103 +98,17 @@ function Stage1() {
 
   // Plataformas verdes fijas
   const platforms = [
-    { x: 700, y: window.innerHeight - groundHeight - 200, width: 80, height: 40, img: platform_doble },
-    { x: 960, y: window.innerHeight - groundHeight - 300, width: 160, height: 40, img: platform_cuadruple },
-    { x: 1780, y: window.innerHeight - groundHeight - 100, width: 120, height: 40, img: platform_triple },
-    { x: 1900, y: window.innerHeight - groundHeight - 230, width: 80, height: 40, img: platform_doble },
-    { x: 1700, y: window.innerHeight - groundHeight - 330, width: 40, height: 40, img: platform_una },
-    { x: 3100, y: window.innerHeight - groundHeight - 200, width: 160, height: 40, img: platform_cuadruple }
   ];
 
   // Obstáculos verdes fijos (no se mueven)
   const obstacles = [
-    { x: 800, y: window.innerHeight - groundHeight - 80, width: 482, height: 80, img: obst1 },
-    { x: 1282, y: window.innerHeight - groundHeight - 240, width: 200, height: 240, img: obst2 },
-    { x: 2200, y: window.innerHeight - groundHeight - 120, width: 120, height: 120, img: obst3 },
-    { x: 2900, y: window.innerHeight - groundHeight - 80, width: 120, height: 80, img: obst4 },
-    { x: 3400, y: 300, width: 80, height: 220, img: PIPEOUT },
-    { x: 3480, y: window.innerHeight - groundHeight - 720, width: 900, height: 720, img: obst5 },
   ];
 
   // Enemigos amarillos, con estado para color y desaparición
   const enemies = useRef([
-    {
-      x: 800,
-      y: window.innerHeight - groundHeight - playerHeight - 45,
-      width: 50,
-      height: 37,
-      speed: 1,
-      minX: 800,
-      maxX: 1050,
-      direction: 1,
-      isHit: false, // para saber si está "rojo"
-      hitTimeout: null,
-    },
-    {
-      x: 1800,
-      y: window.innerHeight - groundHeight - playerHeight - 65,
-      width: 50,
-      height: 37,
-      speed: 1,
-      minX: 1800,
-      maxX: 1850,
-      direction: 1,
-      isHit: false, // para saber si está "rojo"
-      hitTimeout: null,
-    },
-    {
-      x: 2400,
-      y: window.innerHeight - groundHeight - playerHeight + 35,
-      width: 50,
-      height: 37,
-      speed: 1,
-      minX: 2400,
-      maxX: 2600,
-      direction: -1,
-      isHit: false, // para saber si está "rojo"
-      hitTimeout: null,
-    },
-    {
-      x: 2600,
-      y: window.innerHeight - groundHeight - playerHeight + 35,
-      width: 50,
-      height: 37,
-      speed: 1.2,
-      minX: 2600,
-      maxX: 2800,
-      direction: 1,
-      isHit: false, // para saber si está "rojo"
-      hitTimeout: null,
-    }
   ]);
 
   const boxes = useRef([
-    {
-      x: 300,
-      y: window.innerHeight - groundHeight - 200,
-      width: 40,
-      height: 40,
-      isHit: false,
-      jumpOffset: 0,
-      onHit: () => {
-        set_activate_into(true)
-      },
-      imgON: BOX,
-      imgOFF: BOXOFF
-    },
-    {
-      x: 2250,
-      y: window.innerHeight - groundHeight - 300,
-      width: 40,
-      height: 40,
-      isHit: false,
-      jumpOffset: 0,
-      onHit: () => {
-        set_activate2(true)
-      },
-      imgON: BOX,
-      imgOFF: BOXOFF
-    },
   ]);
 
   useEffect(() => {
@@ -361,7 +274,7 @@ function Stage1() {
             if (progress < 1) {
               requestAnimationFrame(animateDown);
             } else {
-              window.location.href = "/stage2";
+              window.location.href = "/";
             }
           };
 
@@ -800,4 +713,4 @@ function Stage1() {
   );
 }
 
-export default Stage1;
+export default Stage2;
