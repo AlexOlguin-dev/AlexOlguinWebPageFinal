@@ -9,6 +9,8 @@ import BG3 from '../assets/img/map/background3.png';
 import BG4 from '../assets/img/map/background4.png';
 import FLOOR from '../assets/img/map/floor.png';
 import PIPEOUT from '../assets/img/map/pipe.png';
+import coinSprite from '../assets/img/map/decorations/coins.png';
+import heartSprite from '../assets/img/map/decorations/heart.png';
 //BOXES
 import BOX from '../assets/img/map/decorations/InfoBox.png';
 import BOXOFF from '../assets/img/map/decorations/InfoBox_off.png';
@@ -91,6 +93,11 @@ function Stage1() {
   const [activate_intro,set_activate_into] = useState(false);
   const [activate2,set_activate2] = useState(false);
   const [isGoingDownPipe, setIsGoingDownPipe] = useState(false);
+  const [coinCount, setCoinCount] = useState(0);
+  const [showLifeScreen, setShowLifeScreen] = useState(false);
+  const [showedLife, setShowedLife] = useState(false);
+  const [lifeCount,setLifeCount] = useState(99);
+  const [lifeScreenOpacity, setLifeScreenOpacity] = useState(0);
   const fullText = ` ¡Hola! Bienvenidos... Soy Alex Olguín, un desarrollador FullStack con sólida trayectoria, capaz de crear desde sitios livianos hasta plataformas complejas.\nCubriendo todo el ciclo de vida: análisis, arquitectura, desarrollo full‑stack y despliegue.`;
   const typedText = useTypewriter(activate_intro ? fullText : "", 50, 1200);
   const fullText2 = ` Este breve portafolio es una muestra de mi habilidad para transformar ideas en soluciones digitales de calidad.\nMe adapto rápido, aprendo nuevas tecnologías con entusiasmo y colaboro eficazmente para impulsar los objetivos del negocio.`;
@@ -196,6 +203,29 @@ function Stage1() {
       imgON: BOX,
       imgOFF: BOXOFF
     },
+  ]);
+
+  const [coins, setCoins] = useState([
+    { x: 480, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 520, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 560, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 600, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 640, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 980, y: window.innerHeight - groundHeight - 340, width: 20, height: 24 },
+    { x: 1020, y: window.innerHeight - groundHeight - 340, width: 20, height: 24 },
+    { x: 1060, y: window.innerHeight - groundHeight - 340, width: 20, height: 24 },
+    { x: 1100, y: window.innerHeight - groundHeight - 340, width: 20, height: 24 },
+    { x: 1600, y: window.innerHeight - groundHeight - 400, width: 20, height: 24 },
+    { x: 1640, y: window.innerHeight - groundHeight - 360, width: 20, height: 24 },
+    { x: 1640, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 1680, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 1720, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 1760, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 3100, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 3140, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 3180, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 3220, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
+    { x: 3260, y: window.innerHeight - groundHeight - 40, width: 20, height: 24 },
   ]);
 
   useEffect(() => {
@@ -412,25 +442,42 @@ function Stage1() {
         const touchingRightSide =
           playerLeft <= enemyRight && playerRight > enemyRight && verticalOverlap;
 
-        if ((touchingLeftSide || touchingRightSide) && !enemy.isHit) {
+        if ((touchingLeftSide || touchingRightSide) && !enemy.isHit && !showedLife) {
           setPlayerCanMove(false);
           setPlayerColor(dead);
           setPlayerOpacity(1);
+          setLifeCount(prev => Math.max(prev - 1, 0)); // Resta 1 vida
+          setShowedLife(true); // Evita múltiples activaciones
 
+          // Desaparece el jugador primero
           setTimeout(() => {
             setPlayerOpacity(0);
           }, 100);
 
+          // Mostrar overlay con fade-in
           setTimeout(() => {
-            posX.current = 50;
-            posY.current = window.innerHeight - groundHeight - playerHeight;
-            velocityX.current = 0;
-            velocityY.current = 0;
-            isJumping.current = false;
-            jumpDirection.current = "none";
-            setPlayerOpacity(1);
-            setPlayerCanMove(true);
-          }, 1100);
+            setShowLifeScreen(true);
+            setTimeout(() => {
+              setLifeScreenOpacity(1); // Fade-in
+            }, 10);
+          }, 300);
+
+          // Ocultar con fade-out
+          setTimeout(() => {
+            setLifeScreenOpacity(0); // Fade-out
+            setTimeout(() => {
+              setShowLifeScreen(false);
+              posX.current = 50;
+              posY.current = window.innerHeight - groundHeight - playerHeight;
+              velocityX.current = 0;
+              velocityY.current = 0;
+              isJumping.current = false;
+              jumpDirection.current = "none";
+              setPlayerOpacity(1);
+              setPlayerCanMove(true);
+              setShowedLife(false);
+            }, 400); // Espera a que termine el fade-out
+          }, 3000);
         }
 
         // Movimiento y rotación del sprite enemigo
@@ -520,6 +567,27 @@ function Stage1() {
       cameraOffsetX.current = Math.min(
         0,
         halfScreen - posX.current - playerWidth / 2
+      );
+
+      setCoins((prevCoins) =>
+        prevCoins.filter((coin) => {
+          const coinLeft = coin.x;
+          const coinRight = coin.x + coin.width;
+          const coinTop = coin.y;
+          const coinBottom = coin.y + coin.height;
+
+          const isTouching =
+            posX.current + playerWidth > coinLeft &&
+            posX.current < coinRight &&
+            posY.current + playerHeight > coinTop &&
+            posY.current < coinBottom;
+
+          if (isTouching) {
+            setCoinCount((prev) => prev + 1);
+            return false; // Elimina la moneda
+          }
+          return true; // Mantenerla
+        })
       );
 
       setTick((t) => t + 1);
@@ -686,6 +754,24 @@ function Stage1() {
             />
           ))}
 
+          {/**Monedas */}
+          {coins.map((coin, i) => (
+            <div
+              key={`coin-${i}`}
+              style={{
+                position: "fixed",
+                left: coin.x,
+                top: coin.y,
+                width: coin.width,
+                height: coin.height,
+                backgroundImage: `url(${coinSprite})`, // Asegúrate de tener esta imagen importada
+                backgroundSize: "cover",
+                transform: `translateX(${cameraOffsetX.current}px)`,
+                zIndex: 3
+              }}
+            />
+          ))}
+
           {/* Suelo azul */}
           <div
             style={{
@@ -793,6 +879,78 @@ function Stage1() {
               </Typography>
             </motion.div>
           )}
+
+          {/**LIFE SCREEN */}
+          {showLifeScreen && (
+            <div
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                backgroundColor: "#38002C",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 9999,
+                color: "white",
+                fontSize: "36px",
+                fontWeight: "bold",
+                opacity: lifeScreenOpacity,
+                transition: "opacity 0.5s ease-in-out",
+                pointerEvents: "none", // evita bloqueos del juego
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <div
+                  style={{
+                    width: playerWidth,
+                    height: playerHeight,
+                    backgroundImage: `url(${playerColor})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+                <span style={{ fontSize: "30px", fontFamily: '"Press Start 2P", monospace', }}>X {lifeCount}</span>
+              </div>
+            </div>
+          )}
+
+          {/**contador VIDAS */}
+          <div style={{
+            position: "absolute",
+            top: 60,
+            right: 40,
+            fontSize: "24px",
+            color: "gold",
+            fontWeight: "bold",
+            zIndex: 10,
+            display: "flex",
+            alignItems: "center",
+            gap: "8px", // Espacio entre la imagen y el texto
+          }}>
+            <img src={heartSprite} alt="coin" style={{ width: "30px", height: "30px" }} />
+            <Typography style={{ fontWeight: "bold", fontFamily: '"Press Start 2P", monospace' }}>X{lifeCount}</Typography>
+          </div>
+
+          {/**contador monedas */}
+          <div style={{
+            position: "absolute",
+            top: 100,
+            right: 40,
+            fontSize: "24px",
+            color: "gold",
+            fontWeight: "bold",
+            zIndex: 10,
+            display: "flex",
+            alignItems: "center",
+            gap: "8px", // Espacio entre la imagen y el texto
+          }}>
+            <img src={coinSprite} alt="coin" style={{ width: "24px", height: "24px" }} />
+            <Typography style={{ fontWeight: "bold", fontFamily: '"Press Start 2P", monospace' }}>X{coinCount/2}</Typography>
+          </div>
 
         </Box>
       </Box>
