@@ -141,7 +141,7 @@ function Stage1() {
     { x: 1282, y: window.innerHeight - groundHeight - 240, width: 200, height: 240, img: obst2, zIndex: 5 },
     { x: 2200, y: window.innerHeight - groundHeight - 120, width: 120, height: 120, img: obst3, zIndex: 5 },
     { x: 2900, y: window.innerHeight - groundHeight - 80, width: 120, height: 80, img: obst4, zIndex: 5 },
-    { x: 3400, y: 300, width: 80, height: 220, img: PIPEOUT, zIndex: 8 },
+    { x: 3400, y: window.innerHeight - groundHeight - 200, width: 80, height: 220, img: PIPEOUT, zIndex: 8 },
     { x: 3480, y: window.innerHeight - groundHeight - 720, width: 900, height: 720, img: obst5, zIndex: 5 },
   ];
 
