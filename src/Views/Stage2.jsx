@@ -9,6 +9,8 @@ import BG3 from '../assets/img/map/background3_stage2.png';
 import BG4 from '../assets/img/map/background4_stage2.png';
 import FLOOR from '../assets/img/map/floor_stage2.png';
 import PIPEOUT from '../assets/img/map/pipe.png';
+import coinSprite from '../assets/img/map/decorations/coins.png';
+import heartSprite from '../assets/img/map/decorations/heart.png';
 import CONTROLL from '../assets/img/controlL.png';
 import CONTROLR from '../assets/img/controlR.png';
 import CONTROLUP from '../assets/img/controlUp.png';
@@ -26,6 +28,7 @@ import obst1 from '../assets/img/map/obst1.png';
 import obst2 from '../assets/img/map/obst2.png';
 import obst3 from '../assets/img/map/obst3.png';
 import obst4 from '../assets/img/map/obst4.png';
+import obst5 from '../assets/img/map/obst5.png';
 //PLAYER
 import idle from '../assets/img/player/idle.png';
 import right from '../assets/img/player/right.png';
@@ -95,6 +98,11 @@ function Stage2() {
   const [activate_intro,set_activate_into] = useState(false);
   const [activate2,set_activate2] = useState(false);
   const [isGoingDownPipe, setIsGoingDownPipe] = useState(false);
+  const [coinCount, setCoinCount] = useState(0);
+  const [showLifeScreen, setShowLifeScreen] = useState(false);
+  const [showedLife, setShowedLife] = useState(false);
+  const [lifeCount,setLifeCount] = useState(99);
+  const [lifeScreenOpacity, setLifeScreenOpacity] = useState(0);
   const fullText = ` ¡Hola! Bienvenidos... Soy Alex Olguín, un desarrollador FullStack con sólida trayectoria, capaz de crear desde sitios livianos hasta plataformas complejas.\nCubriendo todo el ciclo de vida: análisis, arquitectura, desarrollo full‑stack y despliegue.`;
   const typedText = useTypewriter(activate_intro ? fullText : "", 50, 1200);
   const fullText2 = ` Este breve portafolio es una muestra de mi habilidad para transformar ideas en soluciones digitales de calidad.\nMe adapto rápido, aprendo nuevas tecnologías con entusiasmo y colaboro eficazmente para impulsar los objetivos del negocio.`;
@@ -114,6 +122,9 @@ function Stage2() {
   ]);
 
   const boxes = useRef([
+  ]);
+
+  const [coins, setCoins] = useState([
   ]);
 
   useEffect(() => {
@@ -288,7 +299,7 @@ function Stage2() {
             if (progress < 1) {
               requestAnimationFrame(animateDown);
             } else {
-              window.location.href = "/";
+              window.location.href = "/stage2";
             }
           };
 
@@ -339,25 +350,42 @@ function Stage2() {
         const touchingRightSide =
           playerLeft <= enemyRight && playerRight > enemyRight && verticalOverlap;
 
-        if ((touchingLeftSide || touchingRightSide) && !enemy.isHit) {
+        if ((touchingLeftSide || touchingRightSide) && !enemy.isHit && !showedLife) {
           setPlayerCanMove(false);
           setPlayerColor(dead);
           setPlayerOpacity(1);
+          setLifeCount(prev => Math.max(prev - 1, 0)); // Resta 1 vida
+          setShowedLife(true); // Evita múltiples activaciones
 
+          // Desaparece el jugador primero
           setTimeout(() => {
             setPlayerOpacity(0);
           }, 100);
 
+          // Mostrar overlay con fade-in
           setTimeout(() => {
-            posX.current = 50;
-            posY.current = window.innerHeight - groundHeight - playerHeight;
-            velocityX.current = 0;
-            velocityY.current = 0;
-            isJumping.current = false;
-            jumpDirection.current = "none";
-            setPlayerOpacity(1);
-            setPlayerCanMove(true);
-          }, 1100);
+            setShowLifeScreen(true);
+            setTimeout(() => {
+              setLifeScreenOpacity(1); // Fade-in
+            }, 10);
+          }, 300);
+
+          // Ocultar con fade-out
+          setTimeout(() => {
+            setLifeScreenOpacity(0); // Fade-out
+            setTimeout(() => {
+              setShowLifeScreen(false);
+              posX.current = 50;
+              posY.current = window.innerHeight - groundHeight - playerHeight;
+              velocityX.current = 0;
+              velocityY.current = 0;
+              isJumping.current = false;
+              jumpDirection.current = "none";
+              setPlayerOpacity(1);
+              setPlayerCanMove(true);
+              setShowedLife(false);
+            }, 400); // Espera a que termine el fade-out
+          }, 3000);
         }
 
         // Movimiento y rotación del sprite enemigo
@@ -449,6 +477,27 @@ function Stage2() {
         halfScreen - posX.current - playerWidth / 2
       );
 
+      setCoins((prevCoins) =>
+        prevCoins.filter((coin) => {
+          const coinLeft = coin.x;
+          const coinRight = coin.x + coin.width;
+          const coinTop = coin.y;
+          const coinBottom = coin.y + coin.height;
+
+          const isTouching =
+            posX.current + playerWidth > coinLeft &&
+            posX.current < coinRight &&
+            posY.current + playerHeight > coinTop &&
+            posY.current < coinBottom;
+
+          if (isTouching) {
+            setCoinCount((prev) => prev + 1);
+            return false; // Elimina la moneda
+          }
+          return true; // Mantenerla
+        })
+      );
+
       setTick((t) => t + 1);
     };
 
@@ -467,12 +516,12 @@ function Stage2() {
               position: "absolute",
               top: isMobile ? 0 : "-30%",
               left: 0,
-              width: "100vw", // más ancho para repetir con margen
+              width: "100vw",
               height: isMobile ? "100vh" : "100%",
               backgroundImage: `url(${BG1})`,
               backgroundRepeat: "repeat-x",
               backgroundSize: isMobile ? "cover" : "cover",
-              backgroundPositionX: `${cameraOffsetX.current * 0.2}px`, // movimiento más lento
+              backgroundPositionX: `${cameraOffsetX.current * 0.2}px`,
               backgroundPositionY: "top",
               zIndex: 0,
             }}
@@ -489,7 +538,7 @@ function Stage2() {
               backgroundImage: `url(${BG2})`,
               backgroundRepeat: "repeat-x",
               backgroundSize: isMobile ? "cover" : "contain",
-              backgroundPositionX: `${cameraOffsetX.current * 0.4}px`, // movimiento intermedio
+              backgroundPositionX: `${cameraOffsetX.current * 0.4}px`,
               backgroundPositionY: "top",
               zIndex: 1,
               pointerEvents: "none",
@@ -567,7 +616,7 @@ function Stage2() {
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 transform: `translateX(${cameraOffsetX.current}px)`,
-                zIndex: 4,
+                zIndex: obs.zIndex,
               }}
             />
           ))}
@@ -613,6 +662,24 @@ function Stage2() {
             />
           ))}
 
+          {/**Monedas */}
+          {coins.map((coin, i) => (
+            <div
+              key={`coin-${i}`}
+              style={{
+                position: "fixed",
+                left: coin.x,
+                top: coin.y,
+                width: coin.width,
+                height: coin.height,
+                backgroundImage: `url(${coinSprite})`, // Asegúrate de tener esta imagen importada
+                backgroundSize: "cover",
+                transform: `translateX(${cameraOffsetX.current}px)`,
+                zIndex: 6
+              }}
+            />
+          ))}
+
           {/* Suelo azul */}
           <div
             style={{
@@ -625,7 +692,7 @@ function Stage2() {
               backgroundRepeat: "repeat-x", // para repetir la imagen horizontalmente
               backgroundSize: "contain",
               transform: `translateX(${cameraOffsetX.current}px)`,
-              zIndex: 5,
+              zIndex: 10,
             }}
           />
 
@@ -645,81 +712,81 @@ function Stage2() {
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
               animation: "float 2s ease-in-out infinite",
-              zIndex: 3,
+              zIndex: 4,
             }}
           />
 
-          {/**DECORACIONES */}
-          
-          {/**Caja presentacion */}
-          {activate_intro && (
-            <motion.div
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 300, opacity: 1 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
+          {/**LIFE SCREEN */}
+          {showLifeScreen && (
+            <div
               style={{
-                position: "absolute",
-                top: 80,
-                left: 360,
-                height: "160px",
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
                 backgroundColor: "#38002C",
-                border: "4px solid #F4C975",
-                borderRadius: "5px",
-                zIndex: 3,
-                transform: `translateX(${cameraOffsetX.current}px)`,
-                padding: "10px",
-                overflow: "hidden",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 9999,
+                color: "white",
+                fontSize: "36px",
+                fontWeight: "bold",
+                opacity: lifeScreenOpacity,
+                transition: "opacity 0.5s ease-in-out",
+                pointerEvents: "none", // evita bloqueos del juego
               }}
             >
-              <Typography
-                style={{
-                  fontFamily: '"Press Start 2P", monospace',
-                  fontSize: 10,
-                  textAlign: "left",
-                  color: "white",
-                  whiteSpace: "pre-line",
-                  lineHeight: "1.6",
-                }}
-              >
-                {typedText}
-              </Typography>
-            </motion.div>
+              <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                <div
+                  style={{
+                    width: playerWidth,
+                    height: playerHeight,
+                    backgroundImage: `url(${playerColor})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+                <span style={{ fontSize: "30px", fontFamily: '"Press Start 2P", monospace', }}>X {lifeCount}</span>
+              </div>
+            </div>
           )}
 
-          {/**Caja JV 1 */}
-          {activate2 && (
-            <motion.div
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 400, opacity: 1 }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
-              style={{
-                position: "absolute",
-                top: 80,
-                left: 2400,
-                height: "110px",
-                backgroundColor: "#38002C",
-                border: "4px solid #F4C975",
-                borderRadius: "5px",
-                zIndex: 3,
-                transform: `translateX(${cameraOffsetX.current}px)`,
-                padding: "10px",
-                overflow: "hidden",
-              }}
-            >
-              <Typography
-                style={{
-                  fontFamily: '"Press Start 2P", monospace',
-                  fontSize: 10,
-                  textAlign: "left",
-                  color: "white",
-                  whiteSpace: "pre-line",
-                  lineHeight: "1.6",
-                }}
-              >
-                {typedText2}
-              </Typography>
-            </motion.div>
-          )}
+          {/**contador VIDAS */}
+          <div style={{
+            position: "absolute",
+            top: 60,
+            right: 40,
+            fontSize: "24px",
+            color: "gold",
+            fontWeight: "bold",
+            zIndex: 10,
+            display: "flex",
+            alignItems: "center",
+            gap: "8px", // Espacio entre la imagen y el texto
+          }}>
+            <img src={heartSprite} alt="coin" style={{ width: "30px", height: "30px" }} />
+            <Typography style={{ fontWeight: "bold", fontFamily: '"Press Start 2P", monospace' }}>X{lifeCount}</Typography>
+          </div>
+
+          {/**contador monedas */}
+          <div style={{
+            position: "absolute",
+            top: 100,
+            right: 40,
+            fontSize: "24px",
+            color: "gold",
+            fontWeight: "bold",
+            zIndex: 10,
+            display: "flex",
+            alignItems: "center",
+            gap: "8px", // Espacio entre la imagen y el texto
+          }}>
+            <img src={coinSprite} alt="coin" style={{ width: "24px", height: "24px" }} />
+            <Typography style={{ fontWeight: "bold", fontFamily: '"Press Start 2P", monospace' }}>X{coinCount}</Typography>
+          </div>
 
           {/* CONTROLES TÁCTILES */}
           { isMobile && 
