@@ -229,6 +229,20 @@ function Stage1() {
   ]);
 
   useEffect(() => {
+    const checkOrientation = () => {
+      const isPortrait = window.innerHeight > window.innerWidth;
+      if (isPortrait) {
+        alert("Gira tu dispositivo para jugar en modo horizontal (landscape)");
+        // O bien, muestra un overlay en lugar del alert
+      }
+    };
+
+    checkOrientation();
+    window.addEventListener("resize", checkOrientation);
+    return () => window.removeEventListener("resize", checkOrientation);
+  }, []);
+
+  useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = 'auto'; // Restaurar al salir del componente
@@ -951,6 +965,76 @@ function Stage1() {
             <img src={coinSprite} alt="coin" style={{ width: "24px", height: "24px" }} />
             <Typography style={{ fontWeight: "bold", fontFamily: '"Press Start 2P", monospace' }}>X{coinCount/2}</Typography>
           </div>
+
+          {/* CONTROLES TÁCTILES */}
+          <Box
+            sx={{
+              position: "fixed",
+              bottom: 20,
+              left: 0,
+              width: "100vw",
+              display: "flex",
+              justifyContent: "space-between",
+              px: 2,
+              zIndex: 999,
+            }}
+          >
+            {/* Zona izquierda: mover */}
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <div
+                onTouchStart={() => (keysPressed.current.left = true)}
+                onTouchEnd={() => (keysPressed.current.left = false)}
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: "#222",
+                  borderRadius: "50%",
+                  opacity: 0.7,
+                }}
+              />
+              <div
+                onTouchStart={() => (keysPressed.current.right = true)}
+                onTouchEnd={() => (keysPressed.current.right = false)}
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: "#222",
+                  borderRadius: "50%",
+                  opacity: 0.7,
+                }}
+              />
+            </Box>
+
+            {/* Zona derecha: saltar y agacharse */}
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <div
+                onTouchStart={() => {
+                  if (!isJumping.current) {
+                    velocityY.current = -jumpStrength;
+                    isJumping.current = true;
+                  }
+                }}
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: "#222",
+                  borderRadius: "50%",
+                  opacity: 0.7,
+                }}
+              />
+              <div
+                onTouchStart={() => (keysPressed.current.down = true)}
+                onTouchEnd={() => (keysPressed.current.down = false)}
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: "#222",
+                  borderRadius: "50%",
+                  opacity: 0.7,
+                }}
+              />
+            </Box>
+          </Box>
 
         </Box>
       </Box>
