@@ -9,6 +9,10 @@ import BG3 from '../assets/img/map/background3_stage2.png';
 import BG4 from '../assets/img/map/background4_stage2.png';
 import FLOOR from '../assets/img/map/floor_stage2.png';
 import PIPEOUT from '../assets/img/map/pipe.png';
+import CONTROLL from '../assets/img/controlL.png';
+import CONTROLR from '../assets/img/controlR.png';
+import CONTROLUP from '../assets/img/controlUp.png';
+import CONTROLDOWN from '../assets/img/controlDown.png';
 //BOXES
 import BOX from '../assets/img/map/decorations/InfoBox.png';
 import BOXOFF from '../assets/img/map/decorations/InfoBox_off.png';
@@ -718,73 +722,79 @@ function Stage2() {
           )}
 
           {/* CONTROLES TÁCTILES */}
-          <Box
-            sx={{
-              position: "fixed",
-              bottom: 20,
-              left: 0,
-              width: "100vw",
-              display: "flex",
-              justifyContent: "space-between",
-              zIndex: 999
-            }}
-          >
-            {/* Zona izquierda: mover */}
-            <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
-              <div
-                onTouchStart={() => (keysPressed.current.left = true)}
-                onTouchEnd={() => (keysPressed.current.left = false)}
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: "#222",
-                  borderRadius: "50%",
-                  opacity: 0.7,
-                }}
-              />
-              <div
-                onTouchStart={() => (keysPressed.current.right = true)}
-                onTouchEnd={() => (keysPressed.current.right = false)}
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: "#222",
-                  borderRadius: "50%",
-                  opacity: 0.7,
-                }}
-              />
-            </Box>
+          { isMobile && 
+            <Box
+              sx={{
+                position: "fixed",
+                bottom: 20,
+                left: 0,
+                width: "100vw",
+                display: "flex",
+                justifyContent: "space-between",
+                zIndex: 999
+              }}
+            >
+              {/* Zona izquierda: mover */}
+              <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
+                <div
+                  onTouchStart={() => (keysPressed.current.left = true)}
+                  onTouchEnd={() => (keysPressed.current.left = false)}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundImage: `url(${CONTROLL})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+                <div
+                  onTouchStart={() => (keysPressed.current.right = true)}
+                  onTouchEnd={() => (keysPressed.current.right = false)}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundImage: `url(${CONTROLR})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+              </Box>
 
-            {/* Zona derecha: saltar y agacharse */}
-            <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
-              <div
-                onTouchStart={() => {
-                  if (!isJumping.current) {
-                    velocityY.current = -jumpStrength;
-                    isJumping.current = true;
-                  }
-                }}
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: "#222",
-                  borderRadius: "50%",
-                  opacity: 0.7,
-                }}
-              />
-              <div
-                onTouchStart={() => (keysPressed.current.down = true)}
-                onTouchEnd={() => (keysPressed.current.down = false)}
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: "#222",
-                  borderRadius: "50%",
-                  opacity: 0.7,
-                }}
-              />
+              {/* Zona derecha: saltar y agacharse */}
+              <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
+                <div
+                  onTouchStart={() => {
+                    if (!isJumping.current) {
+                      velocityY.current = -jumpStrength;
+                      isJumping.current = true;
+                    }
+                  }}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundImage: `url(${CONTROLUP})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+                <div
+                  onTouchStart={() => (keysPressed.current.down = true)}
+                  onTouchEnd={() => (keysPressed.current.down = false)}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundImage: `url(${CONTROLDOWN})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+              </Box>
             </Box>
-          </Box>
+          }
 
         </Box>
       </Box>

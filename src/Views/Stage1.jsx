@@ -11,6 +11,29 @@ import FLOOR from '../assets/img/map/floor.png';
 import PIPEOUT from '../assets/img/map/pipe.png';
 import coinSprite from '../assets/img/map/decorations/coins.png';
 import heartSprite from '../assets/img/map/decorations/heart.png';
+import CONTROLL from '../assets/img/controlL.png';
+import CONTROLR from '../assets/img/controlR.png';
+import CONTROLUP from '../assets/img/controlUp.png';
+import CONTROLDOWN from '../assets/img/controlDown.png';
+import ROCK1 from '../assets/img/map/decorations/rocks/6.png';
+import ROCK2 from '../assets/img/map/decorations/rocks/5.png';
+import ROCK3 from '../assets/img/map/decorations/rocks/4.png';
+import ROCK4 from '../assets/img/map/decorations/rocks/3.png';
+import ROCK5 from '../assets/img/map/decorations/rocks/2.png';
+import ROCK6 from '../assets/img/map/decorations/rocks/1.png';
+import FUENTE from '../assets/img/map/decorations/1.png';
+import FUENTEWATER from '../assets/img/map/decorations/2.png';
+import BUSH1 from '../assets/img/map/decorations/bushes/17.png';
+import BUSH2 from '../assets/img/map/decorations/bushes/19.png';
+import BUSH3 from '../assets/img/map/decorations/bushes/20.png';
+import BUSH4 from '../assets/img/map/decorations/bushes/16.png';
+import TREE1 from '../assets/img/map/decorations/trees/Tree4.png';
+import TREE2 from '../assets/img/map/decorations/trees/Tree2.png';
+import TREE3 from '../assets/img/map/decorations/trees/Tree1.png';
+import TREE4 from '../assets/img/map/decorations/trees/Tree3.png';
+import BENCH1 from '../assets/img/map/decorations/6.png';
+import BENCH2 from '../assets/img/map/decorations/7.png';
+import WOODBOX from '../assets/img/map/decorations/Box.png';
 //BOXES
 import BOX from '../assets/img/map/decorations/InfoBox.png';
 import BOXOFF from '../assets/img/map/decorations/InfoBox_off.png';
@@ -44,8 +67,8 @@ const moveSpeed = 6;
 const jumpStrength = 16;
 const extraJumpStrength = 4; // salto más pequeño al caer sobre enemigo
 const groundHeight = 0.3 * window.innerHeight;
-const playerWidth = 50;
-const playerHeight = 70;
+const playerWidth = 30;
+const playerHeight = 50;
 const groundWidth = 5000;
 
 const useTypewriter = (text, speed = 50, delay = 800) => {
@@ -129,7 +152,7 @@ function Stage1() {
   const enemies = useRef([
     {
       x: 800,
-      y: window.innerHeight - groundHeight - playerHeight - 45,
+      y: window.innerHeight - groundHeight - playerHeight - 65,
       width: 50,
       height: 37,
       speed: 1,
@@ -141,7 +164,7 @@ function Stage1() {
     },
     {
       x: 1800,
-      y: window.innerHeight - groundHeight - playerHeight - 65,
+      y: window.innerHeight - groundHeight - playerHeight - 85,
       width: 50,
       height: 37,
       speed: 1,
@@ -153,7 +176,7 @@ function Stage1() {
     },
     {
       x: 2400,
-      y: window.innerHeight - groundHeight - playerHeight + 35,
+      y: window.innerHeight - groundHeight - playerHeight + 15,
       width: 50,
       height: 37,
       speed: 1,
@@ -165,7 +188,7 @@ function Stage1() {
     },
     {
       x: 2600,
-      y: window.innerHeight - groundHeight - playerHeight + 35,
+      y: window.innerHeight - groundHeight - playerHeight + 15,
       width: 50,
       height: 37,
       speed: 1.2,
@@ -777,7 +800,7 @@ function Stage1() {
                 backgroundImage: `url(${coinSprite})`, // Asegúrate de tener esta imagen importada
                 backgroundSize: "cover",
                 transform: `translateX(${cameraOffsetX.current}px)`,
-                zIndex: 3
+                zIndex: 6
               }}
             />
           ))}
@@ -814,11 +837,9 @@ function Stage1() {
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
               animation: "float 2s ease-in-out infinite",
-              zIndex: 3,
+              zIndex: 4,
             }}
           />
-
-          {/**DECORACIONES */}
           
           {/**Caja presentacion */}
           {activate_intro && (
@@ -959,77 +980,437 @@ function Stage1() {
             gap: "8px", // Espacio entre la imagen y el texto
           }}>
             <img src={coinSprite} alt="coin" style={{ width: "24px", height: "24px" }} />
-            <Typography style={{ fontWeight: "bold", fontFamily: '"Press Start 2P", monospace' }}>X{coinCount/2}</Typography>
+            <Typography style={{ fontWeight: "bold", fontFamily: '"Press Start 2P", monospace' }}>X{coinCount}</Typography>
           </div>
 
           {/* CONTROLES TÁCTILES */}
-          <Box
-            sx={{
-              position: "fixed",
-              bottom: 20,
-              left: 0,
-              width: "100vw",
-              display: "flex",
-              justifyContent: "space-between",
-              zIndex: 999
-            }}
-          >
-            {/* Zona izquierda: mover */}
-            <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
-              <div
-                onTouchStart={() => (keysPressed.current.left = true)}
-                onTouchEnd={() => (keysPressed.current.left = false)}
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: "#222",
-                  borderRadius: "50%",
-                  opacity: 0.7,
-                }}
-              />
-              <div
-                onTouchStart={() => (keysPressed.current.right = true)}
-                onTouchEnd={() => (keysPressed.current.right = false)}
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: "#222",
-                  borderRadius: "50%",
-                  opacity: 0.7,
-                }}
-              />
-            </Box>
+          { isMobile && 
+            <Box
+              sx={{
+                position: "fixed",
+                bottom: 20,
+                left: 0,
+                width: "100vw",
+                display: "flex",
+                justifyContent: "space-between",
+                zIndex: 999
+              }}
+            >
+              {/* Zona izquierda: mover */}
+              <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
+                <div
+                  onTouchStart={() => (keysPressed.current.left = true)}
+                  onTouchEnd={() => (keysPressed.current.left = false)}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundImage: `url(${CONTROLL})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+                <div
+                  onTouchStart={() => (keysPressed.current.right = true)}
+                  onTouchEnd={() => (keysPressed.current.right = false)}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundImage: `url(${CONTROLR})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+              </Box>
 
-            {/* Zona derecha: saltar y agacharse */}
-            <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
-              <div
-                onTouchStart={() => {
-                  if (!isJumping.current) {
-                    velocityY.current = -jumpStrength;
-                    isJumping.current = true;
-                  }
-                }}
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: "#222",
-                  borderRadius: "50%",
-                  opacity: 0.7,
-                }}
-              />
-              <div
-                onTouchStart={() => (keysPressed.current.down = true)}
-                onTouchEnd={() => (keysPressed.current.down = false)}
-                style={{
-                  width: 60,
-                  height: 60,
-                  backgroundColor: "#222",
-                  borderRadius: "50%",
-                  opacity: 0.7,
-                }}
-              />
+              {/* Zona derecha: saltar y agacharse */}
+              <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
+                <div
+                  onTouchStart={() => {
+                    if (!isJumping.current) {
+                      velocityY.current = -jumpStrength;
+                      isJumping.current = true;
+                    }
+                  }}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundImage: `url(${CONTROLUP})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+                <div
+                  onTouchStart={() => (keysPressed.current.down = true)}
+                  onTouchEnd={() => (keysPressed.current.down = false)}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundImage: `url(${CONTROLDOWN})`,
+                    backgroundSize: "cover",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "center",
+                  }}
+                />
+              </Box>
             </Box>
-          </Box>
+          }
+
+          {/**DECORACIONES */}
+          <img 
+            src={BUSH1} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 468, 
+              left: 100, 
+              zIndex: 5,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TREE1} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 302, 
+              left: 100, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BUSH2} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 470, 
+              left: 300, 
+              zIndex: 6,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BENCH1} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 470, 
+              left: 350, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TREE2} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 364, 
+              left: 500, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BUSH3} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 475, 
+              left: 600, 
+              zIndex: 6,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={ROCK2} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 470, 
+              left: 700, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TREE3} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 310, 
+              left: 1100, 
+              zIndex: 6,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BENCH2} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 390, 
+              left: 1070, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={WOODBOX} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 268, 
+              left: 700, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BUSH4} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 182, 
+              left: 1070, 
+              zIndex: 6,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={FUENTEWATER} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 180, 
+              left: 1370, 
+              zIndex: 6,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BUSH1} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 468, 
+              left: 1470, 
+              zIndex: 5,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TREE4} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 302, 
+              left: 1500, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={ROCK1} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 449, 
+              left: 2000, 
+              zIndex: 5,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BENCH1} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 370, 
+              left: 1800, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BUSH4} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 153, 
+              left: 1702, 
+              zIndex: 5,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={WOODBOX} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 238, 
+              left: 1902, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TREE2} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 364, 
+              left: 1902, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BUSH2} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 471, 
+              left: 1900, 
+              zIndex: 46,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TREE1} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 302, 
+              left: 2400, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TREE3} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 390, 
+              left: 2700, 
+              zIndex: 6,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={WOODBOX} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 348, 
+              left: 2260, 
+              zIndex: 6,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={ROCK2} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 471, 
+              left: 2750, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BUSH1} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 468, 
+              left: 2350, 
+              zIndex: 6,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TREE2} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 284, 
+              left: 2900, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={FUENTE} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 420, 
+              left: 3100, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BUSH1} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 468, 
+              left: 3050, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TREE4} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 302, 
+              left: 3210, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BENCH1} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 470, 
+              left: 3250, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={ROCK3} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 476, 
+              left: 3300, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BUSH3} 
+            alt="fuente" 
+            style={{ 
+              position: " absolute", 
+              top: 475, 
+              left: 3210, 
+              zIndex: 3,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
 
         </Box>
       </Box>
