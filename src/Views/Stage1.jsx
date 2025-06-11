@@ -18,9 +18,6 @@ import CONTROLDOWN from '../assets/img/controlDown.png';
 import ROCK1 from '../assets/img/map/decorations/rocks/6.png';
 import ROCK2 from '../assets/img/map/decorations/rocks/5.png';
 import ROCK3 from '../assets/img/map/decorations/rocks/4.png';
-import ROCK4 from '../assets/img/map/decorations/rocks/3.png';
-import ROCK5 from '../assets/img/map/decorations/rocks/2.png';
-import ROCK6 from '../assets/img/map/decorations/rocks/1.png';
 import FUENTE from '../assets/img/map/decorations/1.png';
 import FUENTEWATER from '../assets/img/map/decorations/2.png';
 import BUSH1 from '../assets/img/map/decorations/bushes/17.png';
@@ -140,12 +137,12 @@ function Stage1() {
 
   // Obstáculos verdes fijos (no se mueven)
   const obstacles = [
-    { x: 800, y: window.innerHeight - groundHeight - 80, width: 482, height: 80, img: obst1 },
-    { x: 1282, y: window.innerHeight - groundHeight - 240, width: 200, height: 240, img: obst2 },
-    { x: 2200, y: window.innerHeight - groundHeight - 120, width: 120, height: 120, img: obst3 },
-    { x: 2900, y: window.innerHeight - groundHeight - 80, width: 120, height: 80, img: obst4 },
-    { x: 3400, y: 300, width: 80, height: 220, img: PIPEOUT },
-    { x: 3480, y: window.innerHeight - groundHeight - 720, width: 900, height: 720, img: obst5 },
+    { x: 800, y: window.innerHeight - groundHeight - 80, width: 482, height: 80, img: obst1, zIndex: 5 },
+    { x: 1282, y: window.innerHeight - groundHeight - 240, width: 200, height: 240, img: obst2, zIndex: 5 },
+    { x: 2200, y: window.innerHeight - groundHeight - 120, width: 120, height: 120, img: obst3, zIndex: 5 },
+    { x: 2900, y: window.innerHeight - groundHeight - 80, width: 120, height: 80, img: obst4, zIndex: 5 },
+    { x: 3400, y: 300, width: 80, height: 220, img: PIPEOUT, zIndex: 8 },
+    { x: 3480, y: window.innerHeight - groundHeight - 720, width: 900, height: 720, img: obst5, zIndex: 5 },
   ];
 
   // Enemigos amarillos, con estado para color y desaparición
@@ -741,7 +738,7 @@ function Stage1() {
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 transform: `translateX(${cameraOffsetX.current}px)`,
-                zIndex: 4,
+                zIndex: obs.zIndex,
               }}
             />
           ))}
@@ -817,7 +814,7 @@ function Stage1() {
               backgroundRepeat: "repeat-x", // para repetir la imagen horizontalmente
               backgroundSize: "contain",
               transform: `translateX(${cameraOffsetX.current}px)`,
-              zIndex: 5,
+              zIndex: 10,
             }}
           />
 
@@ -1063,8 +1060,8 @@ function Stage1() {
             src={BUSH1} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 468, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 24, 
               left: 100, 
               zIndex: 5,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1074,8 +1071,8 @@ function Stage1() {
             src={TREE1} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 302, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 190, 
               left: 100, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1085,8 +1082,8 @@ function Stage1() {
             src={BUSH2} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 470, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 21, 
               left: 300, 
               zIndex: 6,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1096,8 +1093,8 @@ function Stage1() {
             src={BENCH1} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 470, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 22, 
               left: 350, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1107,8 +1104,8 @@ function Stage1() {
             src={TREE2} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 364, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 128, 
               left: 500, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1118,8 +1115,8 @@ function Stage1() {
             src={BUSH3} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 475, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 18, 
               left: 600, 
               zIndex: 6,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1129,8 +1126,8 @@ function Stage1() {
             src={ROCK2} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 470, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 21, 
               left: 700, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1140,8 +1137,8 @@ function Stage1() {
             src={TREE3} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 310, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 182, 
               left: 1100, 
               zIndex: 6,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1151,8 +1148,8 @@ function Stage1() {
             src={BENCH2} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 390, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 102, 
               left: 1070, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1162,8 +1159,8 @@ function Stage1() {
             src={WOODBOX} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 268, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 224, 
               left: 700, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1173,8 +1170,8 @@ function Stage1() {
             src={BUSH4} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 182, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 309, 
               left: 1070, 
               zIndex: 6,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1184,8 +1181,8 @@ function Stage1() {
             src={FUENTEWATER} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 180, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 311, 
               left: 1370, 
               zIndex: 6,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1195,8 +1192,8 @@ function Stage1() {
             src={BUSH1} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 468, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 24, 
               left: 1470, 
               zIndex: 5,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1206,8 +1203,8 @@ function Stage1() {
             src={TREE4} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 302, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 190, 
               left: 1500, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1217,8 +1214,8 @@ function Stage1() {
             src={ROCK1} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 449, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 43, 
               left: 2000, 
               zIndex: 5,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1228,8 +1225,8 @@ function Stage1() {
             src={BENCH1} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 370, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 122, 
               left: 1800, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1239,8 +1236,8 @@ function Stage1() {
             src={BUSH4} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 153, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 338, 
               left: 1702, 
               zIndex: 5,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1250,8 +1247,8 @@ function Stage1() {
             src={WOODBOX} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 238, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 254, 
               left: 1902, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1261,8 +1258,8 @@ function Stage1() {
             src={TREE2} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 364, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 128, 
               left: 1902, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1272,8 +1269,8 @@ function Stage1() {
             src={BUSH2} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 471, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 21, 
               left: 1900, 
               zIndex: 46,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1283,8 +1280,8 @@ function Stage1() {
             src={TREE1} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 302, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 190, 
               left: 2400, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1294,8 +1291,8 @@ function Stage1() {
             src={TREE3} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 390, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 102, 
               left: 2700, 
               zIndex: 6,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1305,8 +1302,8 @@ function Stage1() {
             src={WOODBOX} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 348, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 144, 
               left: 2260, 
               zIndex: 6,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1316,8 +1313,8 @@ function Stage1() {
             src={ROCK2} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 471, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 20, 
               left: 2750, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1327,8 +1324,8 @@ function Stage1() {
             src={BUSH1} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 468, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 24, 
               left: 2350, 
               zIndex: 6,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1338,8 +1335,8 @@ function Stage1() {
             src={TREE2} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 284, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 208, 
               left: 2900, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1349,8 +1346,8 @@ function Stage1() {
             src={FUENTE} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 420, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 71, 
               left: 3100, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1360,8 +1357,8 @@ function Stage1() {
             src={BUSH1} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 468, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 24, 
               left: 3050, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1371,8 +1368,8 @@ function Stage1() {
             src={TREE4} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 302, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 190, 
               left: 3210, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1382,8 +1379,8 @@ function Stage1() {
             src={BENCH1} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 470, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 22, 
               left: 3250, 
               zIndex: 4,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1393,8 +1390,8 @@ function Stage1() {
             src={ROCK3} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 476, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 16, 
               left: 3300, 
               zIndex: 4,
               transform: `translateX(${cameraOffsetX.current}px)`,
@@ -1404,8 +1401,8 @@ function Stage1() {
             src={BUSH3} 
             alt="fuente" 
             style={{ 
-              position: " absolute", 
-              top: 475, 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 18, 
               left: 3210, 
               zIndex: 3,
               transform: `translateX(${cameraOffsetX.current}px)`,

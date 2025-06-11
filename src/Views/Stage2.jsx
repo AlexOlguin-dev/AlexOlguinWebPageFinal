@@ -45,8 +45,8 @@ const moveSpeed = 6;
 const jumpStrength = 16;
 const extraJumpStrength = 4; // salto más pequeño al caer sobre enemigo
 const groundHeight = 0.3 * window.innerHeight;
-const playerWidth = 50;
-const playerHeight = 70;
+const playerWidth = 30;
+const playerHeight = 50;
 const groundWidth = 5000;
 
 const useTypewriter = (text, speed = 50, delay = 800) => {
