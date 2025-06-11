@@ -74,6 +74,7 @@ const useTypewriter = (text, speed = 50, delay = 800) => {
 
 
 function Stage2() {
+  const [isMobile, setIsMobile] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
   const posX = useRef(50);
   const posY = useRef(window.innerHeight - groundHeight - playerHeight);
@@ -110,6 +111,15 @@ function Stage2() {
 
   const boxes = useRef([
   ]);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 768); // define móvil según ancho pantalla
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -451,13 +461,13 @@ function Stage2() {
           <div
             style={{
               position: "absolute",
-              top: "-30%",
+              top: isMobile ? 0 : "-30%",
               left: 0,
               width: "100vw", // más ancho para repetir con margen
-              height: "100%",
+              height: isMobile ? "100vh" : "100%",
               backgroundImage: `url(${BG1})`,
               backgroundRepeat: "repeat-x",
-              backgroundSize: "cover",
+              backgroundSize: isMobile ? "cover" : "cover",
               backgroundPositionX: `${cameraOffsetX.current * 0.2}px`, // movimiento más lento
               backgroundPositionY: "top",
               zIndex: 0,
@@ -468,13 +478,13 @@ function Stage2() {
           <div
             style={{
               position: "absolute",
-              top: "-30%",
+              top: isMobile ? -200 : "-30%",
               left: 0,
               width: "100vw",
-              height: "100%",
+              height: isMobile ? "100vh" : "100%",
               backgroundImage: `url(${BG2})`,
               backgroundRepeat: "repeat-x",
-              backgroundSize: "contain",
+              backgroundSize: isMobile ? "cover" : "contain",
               backgroundPositionX: `${cameraOffsetX.current * 0.4}px`, // movimiento intermedio
               backgroundPositionY: "top",
               zIndex: 1,
@@ -486,13 +496,13 @@ function Stage2() {
           <div
             style={{
               position: "absolute",
-              top: "-30%",
+              top: isMobile ? -200 : "-30%",
               left: 0,
               width: "100vw",
-              height: "100%",
+              height: isMobile ? "100vh" : "100%",
               backgroundImage: `url(${BG3})`,
               backgroundRepeat: "repeat-x",
-              backgroundSize: "contain",
+              backgroundSize: isMobile ? "cover" : "contain",
               backgroundPositionX: `${cameraOffsetX.current * 0.6}px`, // movimiento intermedio
               backgroundPositionY: "top",
               zIndex: 2,
@@ -504,13 +514,13 @@ function Stage2() {
           <div
             style={{
               position: "absolute",
-              top: "-30%",
+              top: isMobile ? -200 : "-30%",
               left: 0,
               width: "100vw",
-              height: "100%",
+              height: isMobile ? "100vh" : "100%",
               backgroundImage: `url(${BG4})`,
               backgroundRepeat: "repeat-x",
-              backgroundSize: "contain",
+              backgroundSize: isMobile ? "cover" : "contain",
               backgroundPositionX: `${cameraOffsetX.current * 0.8}px`, // movimiento intermedio
               backgroundPositionY: "top",
               zIndex: 3,
@@ -706,6 +716,75 @@ function Stage2() {
               </Typography>
             </motion.div>
           )}
+
+          {/* CONTROLES TÁCTILES */}
+          <Box
+            sx={{
+              position: "fixed",
+              bottom: 20,
+              left: 0,
+              width: "100vw",
+              display: "flex",
+              justifyContent: "space-between",
+              zIndex: 999
+            }}
+          >
+            {/* Zona izquierda: mover */}
+            <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
+              <div
+                onTouchStart={() => (keysPressed.current.left = true)}
+                onTouchEnd={() => (keysPressed.current.left = false)}
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: "#222",
+                  borderRadius: "50%",
+                  opacity: 0.7,
+                }}
+              />
+              <div
+                onTouchStart={() => (keysPressed.current.right = true)}
+                onTouchEnd={() => (keysPressed.current.right = false)}
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: "#222",
+                  borderRadius: "50%",
+                  opacity: 0.7,
+                }}
+              />
+            </Box>
+
+            {/* Zona derecha: saltar y agacharse */}
+            <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
+              <div
+                onTouchStart={() => {
+                  if (!isJumping.current) {
+                    velocityY.current = -jumpStrength;
+                    isJumping.current = true;
+                  }
+                }}
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: "#222",
+                  borderRadius: "50%",
+                  opacity: 0.7,
+                }}
+              />
+              <div
+                onTouchStart={() => (keysPressed.current.down = true)}
+                onTouchEnd={() => (keysPressed.current.down = false)}
+                style={{
+                  width: 60,
+                  height: 60,
+                  backgroundColor: "#222",
+                  borderRadius: "50%",
+                  opacity: 0.7,
+                }}
+              />
+            </Box>
+          </Box>
 
         </Box>
       </Box>

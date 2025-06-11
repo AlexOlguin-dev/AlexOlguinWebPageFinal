@@ -77,7 +77,7 @@ const useTypewriter = (text, speed = 50, delay = 800) => {
 
 
 function Stage1() {
-  const [scale, setScale] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
   const posX = useRef(50);
   const posY = useRef(window.innerHeight - groundHeight - playerHeight);
@@ -230,16 +230,12 @@ function Stage1() {
   ]);
 
   useEffect(() => {
-    const updateScale = () => {
-      const isMobile = window.innerWidth < 768;
-      const newScale = isMobile ? 0.6 : 1; // Escala para móviles
-      setScale(newScale);
-    };
-
-    window.addEventListener("resize", updateScale);
-    updateScale();
-
-    return () => window.removeEventListener("resize", updateScale);
+    function handleResize() {
+      setIsMobile(window.innerWidth <= 768); // define móvil según ancho pantalla
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
@@ -612,7 +608,7 @@ function Stage1() {
   }, [playerCanMove]);
 
   return (
-    <Box sx={{ height: "100vh", backgroundColor: "#38002C", display: "flex", justifyContent: "center", alignItems: "center", position: "relative", overflow: 'hidden', marginTop: "-60px", transform: `scale(${scale})`, }}>
+    <Box sx={{ height: "100vh", backgroundColor: "#38002C", display: "flex", justifyContent: "center", alignItems: "center", position: "relative", overflow: 'hidden', marginTop: "-60px" }}>
       {/* Contenedor del contenido para fade in */}
       <Box sx={{ opacity: fadeIn ? 1 : 0, transition: "opacity 0.8s ease-in-out", width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: "#fff" }}>
         <Box sx={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", overflow: "hidden" }}>
@@ -620,14 +616,14 @@ function Stage1() {
           <div
             style={{
               position: "absolute",
-              top: "-30%",
+              top: isMobile ? 0 : "-30%",
               left: 0,
-              width: "100vw", // más ancho para repetir con margen
-              height: "100%",
+              width: "100vw",
+              height: isMobile ? "100vh" : "100%",
               backgroundImage: `url(${BG1})`,
               backgroundRepeat: "repeat-x",
-              backgroundSize: "cover",
-              backgroundPositionX: `${cameraOffsetX.current * 0.2}px`, // movimiento más lento
+              backgroundSize: isMobile ? "cover" : "cover",
+              backgroundPositionX: `${cameraOffsetX.current * 0.2}px`,
               backgroundPositionY: "top",
               zIndex: 0,
             }}
@@ -637,14 +633,14 @@ function Stage1() {
           <div
             style={{
               position: "absolute",
-              top: "-30%",
+              top: isMobile ? -200 : "-30%",
               left: 0,
               width: "100vw",
-              height: "100%",
+              height: isMobile ? "100vh" : "100%",
               backgroundImage: `url(${BG2})`,
               backgroundRepeat: "repeat-x",
-              backgroundSize: "contain",
-              backgroundPositionX: `${cameraOffsetX.current * 0.4}px`, // movimiento intermedio
+              backgroundSize: isMobile ? "cover" : "contain",
+              backgroundPositionX: `${cameraOffsetX.current * 0.4}px`,
               backgroundPositionY: "top",
               zIndex: 1,
               pointerEvents: "none",
@@ -655,13 +651,13 @@ function Stage1() {
           <div
             style={{
               position: "absolute",
-              top: "-30%",
+              top: isMobile ? -200 : "-30%",
               left: 0,
               width: "100vw",
-              height: "100%",
+              height: isMobile ? "100vh" : "100%",
               backgroundImage: `url(${BG3})`,
               backgroundRepeat: "repeat-x",
-              backgroundSize: "contain",
+              backgroundSize: isMobile ? "cover" : "contain",
               backgroundPositionX: `${cameraOffsetX.current * 0.6}px`, // movimiento intermedio
               backgroundPositionY: "top",
               zIndex: 2,
@@ -673,13 +669,13 @@ function Stage1() {
           <div
             style={{
               position: "absolute",
-              top: "-30%",
+              top: isMobile ? -200 : "-30%",
               left: 0,
               width: "100vw",
-              height: "100%",
+              height: isMobile ? "100vh" : "100%",
               backgroundImage: `url(${BG4})`,
               backgroundRepeat: "repeat-x",
-              backgroundSize: "contain",
+              backgroundSize: isMobile ? "cover" : "contain",
               backgroundPositionX: `${cameraOffsetX.current * 0.8}px`, // movimiento intermedio
               backgroundPositionY: "top",
               zIndex: 3,
@@ -975,12 +971,11 @@ function Stage1() {
               width: "100vw",
               display: "flex",
               justifyContent: "space-between",
-              px: 2,
-              zIndex: 999,
+              zIndex: 999
             }}
           >
             {/* Zona izquierda: mover */}
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
               <div
                 onTouchStart={() => (keysPressed.current.left = true)}
                 onTouchEnd={() => (keysPressed.current.left = false)}
@@ -1006,7 +1001,7 @@ function Stage1() {
             </Box>
 
             {/* Zona derecha: saltar y agacharse */}
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: "flex", gap: 2, padding: "10px" }}>
               <div
                 onTouchStart={() => {
                   if (!isJumping.current) {
