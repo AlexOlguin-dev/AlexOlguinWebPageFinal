@@ -77,6 +77,7 @@ const useTypewriter = (text, speed = 50, delay = 800) => {
 
 
 function Stage1() {
+  const [scale, setScale] = useState(1);
   const [fadeIn, setFadeIn] = useState(false);
   const posX = useRef(50);
   const posY = useRef(window.innerHeight - groundHeight - playerHeight);
@@ -229,17 +230,16 @@ function Stage1() {
   ]);
 
   useEffect(() => {
-    const checkOrientation = () => {
-      const isPortrait = window.innerHeight > window.innerWidth;
-      if (isPortrait) {
-        alert("Gira tu dispositivo para jugar en modo horizontal (landscape)");
-        // O bien, muestra un overlay en lugar del alert
-      }
+    const updateScale = () => {
+      const isMobile = window.innerWidth < 768;
+      const newScale = isMobile ? 0.6 : 1; // Escala para móviles
+      setScale(newScale);
     };
 
-    checkOrientation();
-    window.addEventListener("resize", checkOrientation);
-    return () => window.removeEventListener("resize", checkOrientation);
+    window.addEventListener("resize", updateScale);
+    updateScale();
+
+    return () => window.removeEventListener("resize", updateScale);
   }, []);
 
   useEffect(() => {
@@ -612,7 +612,7 @@ function Stage1() {
   }, [playerCanMove]);
 
   return (
-    <Box sx={{ height: "100vh", backgroundColor: "#38002C", display: "flex", justifyContent: "center", alignItems: "center", position: "relative", overflow: 'hidden', marginTop: "-60px" }}>
+    <Box sx={{ height: "100vh", backgroundColor: "#38002C", display: "flex", justifyContent: "center", alignItems: "center", position: "relative", overflow: 'hidden', marginTop: "-60px", transform: `scale(${scale})`, }}>
       {/* Contenedor del contenido para fade in */}
       <Box sx={{ opacity: fadeIn ? 1 : 0, transition: "opacity 0.8s ease-in-out", width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', color: "#fff" }}>
         <Box sx={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", overflow: "hidden" }}>
