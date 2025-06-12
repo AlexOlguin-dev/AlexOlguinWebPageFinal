@@ -990,7 +990,7 @@ function Stage1() {
                 width: "100vw",
                 display: "flex",
                 justifyContent: "space-between",
-                zIndex: 999
+                zIndex: 999,
               }}
             >
               {/* Zona izquierda: mover */}
@@ -1005,6 +1005,8 @@ function Stage1() {
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
+                    touchAction: "none",
+                    userSelect: "none",
                   }}
                 />
                 <div
@@ -1017,6 +1019,8 @@ function Stage1() {
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
+                    touchAction: "none",
+                    userSelect: "none",
                   }}
                 />
               </Box>
@@ -1037,6 +1041,8 @@ function Stage1() {
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
+                    touchAction: "none",
+                    userSelect: "none",
                   }}
                 />
                 <div
@@ -1049,6 +1055,8 @@ function Stage1() {
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
+                    touchAction: "none",
+                    userSelect: "none",
                   }}
                 />
               </Box>

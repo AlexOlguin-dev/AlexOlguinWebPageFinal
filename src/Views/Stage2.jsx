@@ -79,7 +79,6 @@ const useTypewriter = (text, speed = 50, delay = 800) => {
   return displayedText;
 };
 
-
 function Stage2() {
   const [isMobile, setIsMobile] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
@@ -95,19 +94,12 @@ function Stage2() {
   const jumpDirection = useRef("none");
   const [playerCanMove, setPlayerCanMove] = useState(true);
   const [playerOpacity, setPlayerOpacity] = useState(1);
-  const [activate_intro,set_activate_into] = useState(false);
-  const [activate2,set_activate2] = useState(false);
   const [isGoingDownPipe, setIsGoingDownPipe] = useState(false);
   const [coinCount, setCoinCount] = useState(0);
   const [showLifeScreen, setShowLifeScreen] = useState(false);
   const [showedLife, setShowedLife] = useState(false);
   const [lifeCount,setLifeCount] = useState(99);
   const [lifeScreenOpacity, setLifeScreenOpacity] = useState(0);
-  const fullText = ` ¡Hola! Bienvenidos... Soy Alex Olguín, un desarrollador FullStack con sólida trayectoria, capaz de crear desde sitios livianos hasta plataformas complejas.\nCubriendo todo el ciclo de vida: análisis, arquitectura, desarrollo full‑stack y despliegue.`;
-  const typedText = useTypewriter(activate_intro ? fullText : "", 50, 1200);
-  const fullText2 = ` Este breve portafolio es una muestra de mi habilidad para transformar ideas en soluciones digitales de calidad.\nMe adapto rápido, aprendo nuevas tecnologías con entusiasmo y colaboro eficazmente para impulsar los objetivos del negocio.`;
-  const typedText2 = useTypewriter(activate2 ? fullText2 : "", 45, 1200);
-
 
   // Plataformas verdes fijas
   const platforms = [
