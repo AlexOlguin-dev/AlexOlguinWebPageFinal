@@ -16,19 +16,12 @@ import CONTROLR from '../assets/img/controlR.png';
 import CONTROLUP from '../assets/img/controlUp.png';
 import CONTROLDOWN from '../assets/img/controlDown.png';
 //BOXES
-import BOX from '../assets/img/map/decorations/InfoBox.png';
-import BOXOFF from '../assets/img/map/decorations/InfoBox_off.png';
+
 //PLATAFORMAS
-import platform_una from '../assets/img/map/plataforma_una.png';
-import platform_doble from '../assets/img/map/plataforma_doble.png';
-import platform_triple from '../assets/img/map/plataforma_triple.png';
-import platform_cuadruple from '../assets/img/map/plataforma_cuadruple.png';
+import platform_triple from '../assets/img/map/plataforma_triple_stage2.png';
 //OBSTACULOS
-import obst1 from '../assets/img/map/obst1.png';
-import obst2 from '../assets/img/map/obst2.png';
-import obst3 from '../assets/img/map/obst3.png';
-import obst4 from '../assets/img/map/obst4.png';
-import obst5 from '../assets/img/map/obst5.png';
+import obst1 from '../assets/img/map/obst5_stage2.png';
+import obst2 from '../assets/img/map/obst4_stage2.png';
 //PLAYER
 import idle from '../assets/img/player/idle.png';
 import right from '../assets/img/player/right.png';
@@ -103,10 +96,13 @@ function Stage2() {
 
   // Plataformas verdes fijas
   const platforms = [
+    { x: 250, y: window.innerHeight - groundHeight - 100, width: 120, height: 40, img: platform_triple },
+    { x: 100, y: window.innerHeight - groundHeight - 200, width: 120, height: 40, img: platform_triple },
   ];
 
   // Obstáculos verdes fijos (no se mueven)
   const obstacles = [
+    { x: 400, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst1, zIndex: 5 },
   ];
 
   // Enemigos amarillos, con estado para color y desaparición
@@ -126,6 +122,18 @@ function Stage2() {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+    };
+  
+    document.addEventListener("contextmenu", handleContextMenu);
+
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+    };
   }, []);
 
   useEffect(() => {
@@ -790,7 +798,7 @@ function Stage2() {
                 width: "100vw",
                 display: "flex",
                 justifyContent: "space-between",
-                zIndex: 999
+                zIndex: 999,
               }}
             >
               {/* Zona izquierda: mover */}
@@ -805,6 +813,8 @@ function Stage2() {
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
+                    touchAction: "none",
+                    userSelect: "none",
                   }}
                 />
                 <div
@@ -817,6 +827,8 @@ function Stage2() {
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
+                    touchAction: "none",
+                    userSelect: "none",
                   }}
                 />
               </Box>
@@ -837,6 +849,8 @@ function Stage2() {
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
+                    touchAction: "none",
+                    userSelect: "none",
                   }}
                 />
                 <div
@@ -849,6 +863,8 @@ function Stage2() {
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center",
+                    touchAction: "none",
+                    userSelect: "none",
                   }}
                 />
               </Box>
