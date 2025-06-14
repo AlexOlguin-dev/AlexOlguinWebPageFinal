@@ -18,10 +18,25 @@ import CONTROLDOWN from '../assets/img/controlDown.png';
 //BOXES
 
 //PLATAFORMAS
+import platform_una from '../assets/img/map/plataforma_una_stage2.png';
+import platform_double from '../assets/img/map/plataforma_doble_stage2.png';
 import platform_triple from '../assets/img/map/plataforma_triple_stage2.png';
+import platform_cuadruple from '../assets/img/map/plataforma_cuadruple_stage2.png';
+import platform_quintuple from '../assets/img/map/plataforma_quintuple_stage2.png';
+import platform_sixtuple from '../assets/img/map/plataforma_sixtuple_stage2.png';
+import platform_septuple from '../assets/img/map/plataforma_septuple_stage2.png';
+import platform_octuple from '../assets/img/map/plataforma_octuple_stage2.png';
+import platform_nonuple from '../assets/img/map/plataforma_nonuple_stage2.png';
 //OBSTACULOS
-import obst1 from '../assets/img/map/obst5_stage2.png';
-import obst2 from '../assets/img/map/obst4_stage2.png';
+import obst1 from '../assets/img/map/obst1_stage2.png';
+import obst2 from '../assets/img/map/obst2_stage2.png';
+import obst3 from '../assets/img/map/obst3_stage2.png';
+import obst4 from '../assets/img/map/obst4_stage2.png';
+import obst5 from '../assets/img/map/obst5_stage2.png';
+import obst6 from '../assets/img/map/obst6_stage2.png';
+import obst7 from '../assets/img/map/obst7_stage2.png';
+import obst8 from '../assets/img/map/obst8_stage2.png';
+import obst9 from '../assets/img/map/obst9_stage2.png';
 //PLAYER
 import idle from '../assets/img/player/idle.png';
 import right from '../assets/img/player/right.png';
@@ -96,13 +111,20 @@ function Stage2() {
 
   // Plataformas verdes fijas
   const platforms = [
-    { x: 250, y: window.innerHeight - groundHeight - 100, width: 120, height: 40, img: platform_triple },
+    { x: 280, y: window.innerHeight - groundHeight - 100, width: 120, height: 40, img: platform_triple },
     { x: 100, y: window.innerHeight - groundHeight - 200, width: 120, height: 40, img: platform_triple },
+    { x: 560, y: window.innerHeight - groundHeight - 200, width: 200, height: 40, img: platform_quintuple },
+    { x: 1140, y: window.innerHeight - groundHeight - 100, width: 80, height: 40, img: platform_double },
+    { x: 1240, y: window.innerHeight - groundHeight - 250, width: 40, height: 40, img: platform_una },
+    { x: 1340, y: window.innerHeight - groundHeight - 350, width: 360, height: 40, img: platform_nonuple },
   ];
 
   // Obstáculos verdes fijos (no se mueven)
   const obstacles = [
-    { x: 400, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst1, zIndex: 5 },
+    { x: 400, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 900, y: window.innerHeight - groundHeight - 120, width: 120, height: 120, img: obst2, zIndex: 5 },
+    { x: 1020, y: window.innerHeight - groundHeight - 160, width: 120, height: 160, img: obst8, zIndex: 5 },
+    { x: 1700, y: window.innerHeight - groundHeight - 80, width: 360, height: 80, img: obst6, zIndex: 5 },
   ];
 
   // Enemigos amarillos, con estado para color y desaparición
