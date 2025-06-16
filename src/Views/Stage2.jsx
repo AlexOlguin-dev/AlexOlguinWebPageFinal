@@ -15,8 +15,26 @@ import CONTROLL from '../assets/img/controlL.png';
 import CONTROLR from '../assets/img/controlR.png';
 import CONTROLUP from '../assets/img/controlUp.png';
 import CONTROLDOWN from '../assets/img/controlDown.png';
+import BUTTONBOX from '../assets/img/map/decorations/Button.png';
+import SCREEN from '../assets/img/map/decorations/Screen.png';
+import SCREEN2 from '../assets/img/map/decorations/Screen2.png';
+import SCREEN3 from '../assets/img/map/decorations/Screen3.png';
+//LENGUAJES
+import JAVASCRIPTICON from '../assets/img/map/decorations/Lenguajes/javascript.png';
+import REACTICON from '../assets/img/map/decorations/Lenguajes/react.png';
+import NODEJS from '../assets/img/map/decorations/Lenguajes/nodejs.png';
+import JQUERY from '../assets/img/map/decorations/Lenguajes/jquery.png';
+import MUI from '../assets/img/map/decorations/Lenguajes/mui.png';
+import BOOTSTRAP from '../assets/img/map/decorations/Lenguajes/bootstrap.png';
 //BOXES
-
+import JAVASCRIPT from '../assets/img/map/decorations/JavaScriptBox.png';
+import JAVASCRIPT_OFF from '../assets/img/map/decorations/JavaScriptBox_off.png';
+import PHP from '../assets/img/map/decorations/php.png';
+import PHP_OFF from '../assets/img/map/decorations/php_off.png';
+import MYSQL from '../assets/img/map/decorations/mysql.png';
+import MYSQL_OFF from '../assets/img/map/decorations/mysql_off.png';
+import PYTHON from '../assets/img/map/decorations/python.png';
+import PYTHON_OFF from '../assets/img/map/decorations/python_off.png';
 //PLATAFORMAS
 import platform_una from '../assets/img/map/plataforma_una_stage2.png';
 import platform_double from '../assets/img/map/plataforma_doble_stage2.png';
@@ -108,6 +126,9 @@ function Stage2() {
   const [showedLife, setShowedLife] = useState(false);
   const [lifeCount,setLifeCount] = useState(99);
   const [lifeScreenOpacity, setLifeScreenOpacity] = useState(0);
+  const [JavaScriptDialogue, setJavaScriptDialogue] = useState(false);
+  const JSfullText = ` Tengo más de cinco años trabajando en el ecosistema JavaScript, cubriendo de punta a punta la creación de aplicaciones web y móviles`;
+  const JStypedText = useTypewriter(JavaScriptDialogue ? JSfullText : "", 50, 1200);
 
   // Plataformas verdes fijas
   const platforms = [
@@ -123,7 +144,7 @@ function Stage2() {
     { x: 3900, y: window.innerHeight - groundHeight - 200, width: 80, height: 40, img: platform_double },
     { x: 3700, y: window.innerHeight - groundHeight - 300, width: 40, height: 40, img: platform_una },
     { x: 3960, y: window.innerHeight - groundHeight - 100, width: 280, height: 40, img: platform_septuple },
-    { x: 5100, y: window.innerHeight - groundHeight - 250, width: 320, height: 40, img: platform_octuple },
+    { x: 5100, y: window.innerHeight - groundHeight - 240, width: 320, height: 40, img: platform_octuple },
   ];
 
   const movingPlatforms = useRef([
@@ -131,7 +152,7 @@ function Stage2() {
     { x: 2400, y: window.innerHeight - groundHeight - 350, width: 160, height: 40, img: platform_cuadruple, speed: 1.5, direction: 1, axis: "x", min: 2400, max: 2800 },
     { x: 3240, y: window.innerHeight - groundHeight - 200, width: 40, height: 40, img: platform_una, speed: 1, direction: 1, axis: "y", min: window.innerHeight - groundHeight - 200, max: window.innerHeight - groundHeight - 40},
     { x: 3460, y: window.innerHeight - groundHeight - 160, width: 80, height: 40, img: platform_double, speed: 1, direction: 1, axis: "y", min: window.innerHeight - groundHeight - 160, max: window.innerHeight - groundHeight - 40},
-    { x: 3800, y: window.innerHeight - groundHeight - 350, width: 120, height: 40, img: platform_triple, speed: 1.5, direction: 1, axis: "x", min: 3800, max: 4700 },
+    { x: 3800, y: window.innerHeight - groundHeight - 350, width: 120, height: 40, img: platform_triple, speed: 1.5, direction: 1, axis: "x", min: 3800, max: 4700 }
   ]);
 
   // Obstáculos verdes fijos (no se mueven)
@@ -147,29 +168,146 @@ function Stage2() {
     { x: 3540, y: window.innerHeight - groundHeight - 120, width: 360, height: 120, img: obst7, zIndex: 5 },
     { x: 3780, y: window.innerHeight - groundHeight - 200, width: 120, height: 80, img: obst1, zIndex: 5 },
     { x: 4780, y: window.innerHeight - groundHeight - 160, width: 240, height: 160, img: obst9, zIndex: 5 },
-    { x: 5680, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 5680, y: window.innerHeight - groundHeight - 480, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 5680, y: window.innerHeight - groundHeight - 720, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 5840, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 5840, y: window.innerHeight - groundHeight - 480, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 5840, y: window.innerHeight - groundHeight - 720, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 6000, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 6000, y: window.innerHeight - groundHeight - 480, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 6000,  y: window.innerHeight - groundHeight - 720, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 6160, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 6160, y: window.innerHeight - groundHeight - 480, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 6160,  y: window.innerHeight - groundHeight - 720, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 6320, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 6320, y: window.innerHeight - groundHeight - 480, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 6320,  y: window.innerHeight - groundHeight - 720, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 5600, y: window.innerHeight - groundHeight - 200, width: 80, height: 220, img: PIPEOUT, zIndex: 8 },
+    { x: 5420, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 5020, y: window.innerHeight - groundHeight - 80, width: 120, height: 80, img: obst1, zIndex: 5 },
   ];
+
+  const buttons = useRef([
+    { id: "btn1", x: 1050, y: window.innerHeight - groundHeight - 175, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
+    { id: "btn2", x: 1350, y: window.innerHeight - groundHeight - 365, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
+    { id: "btn3", x: 2200, y: window.innerHeight - groundHeight - 255, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
+    /*{ id: "btn4", x: 2200, y: window.innerHeight - groundHeight - 255, width: 60, height: 20, isPressed: false, jumpOffset: 0 },*/
+  ]);
+
+  const triggeredObjects = useRef([
+    { id: "btn1", x: 1200, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 235, width: 230, height: 200,  speed: 4, direction: "up", isActive: false, img: SCREEN, text: "Construyo interfaces dinámicas con React JS para plataformas web altamente interactivas.", icon: REACTICON },
+    { id: "btn2", x: 1480, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 282, width: 200, height: 240,  speed: 4, direction: "up", isActive: false, img: SCREEN2, text: "Manejo de JQuery para integracion de funciones API REST u otras funciones web de utilidad.", icon: JQUERY },
+    { id: "btn3", x: 1720, y: window.innerHeight - groundHeight - 80, targetY: window.innerHeight - groundHeight - 316, width: 360, height: 200,  speed: 4, direction: "up", isActive: false, img: SCREEN3, text: "Desarrollo servicios y paginas web escalables en JavaScript usando NodeJS para adaptabilidad a mobil y otros usos como WebSocket.", icon: NODEJS },
+    /*{ id: "btn4", x: 2090, y: window.innerHeight - groundHeight - 80, targetY: window.innerHeight - groundHeight - 475, width: 230, height: 200,  speed: 4, direction: "up", isActive: false, img: SCREEN, text: "Diseño UI accesibles y 100 % responsivas para desktop y mobile.", icon: MUI },*/
+  ]);
 
    // Enemigos amarillos, con estado para color y desaparición
   const enemies = useRef([
   ]);
 
   const boxes = useRef([
+    {
+      x: 450,
+      y: window.innerHeight - groundHeight - 400,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        setJavaScriptDialogue(true)
+      },
+      imgON: JAVASCRIPT,
+      imgOFF: JAVASCRIPT_OFF
+    },
+    /*{
+      x: 950,
+      y: window.innerHeight - groundHeight - 300,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        
+      },
+      imgON: REACTBOX,
+      imgOFF: REACT_OFF
+    },
+    {
+      x: 1700,
+      y: window.innerHeight - groundHeight - 250,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        
+      },
+      imgON: JQUERY,
+      imgOFF: JQUERY_OFF
+    },
+    {
+      x: 2250,
+      y: window.innerHeight - groundHeight - 400,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        
+      },
+      imgON: NODEJS,
+      imgOFF: NODEJS_OFF
+    },
+    {
+      x: 3050,
+      y: window.innerHeight - groundHeight - 350,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        
+      },
+      imgON: MUI,
+      imgOFF: MUI_OFF
+    },
+    {
+      x: 3650,
+      y: window.innerHeight - groundHeight - 450,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        
+      },
+      imgON: PHP,
+      imgOFF: PHP_OFF
+    },
+    {
+      x: 4650,
+      y: window.innerHeight - groundHeight - 200,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        
+      },
+      imgON: NGINX,
+      imgOFF: NGINX_OFF
+    },
+    {
+      x: 5250,
+      y: window.innerHeight - groundHeight - 150,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        
+      },
+      imgON: WAMPP,
+      imgOFF: WAMPP_OFF
+    },
+    {
+      x: 5450,
+      y: window.innerHeight - groundHeight - 400,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        
+      },
+      imgON: XAMPP,
+      imgOFF: XAMPP_OFF
+    },*/
   ]);
 
   const [coins, setCoins] = useState([
@@ -577,6 +715,43 @@ function Stage2() {
         }
       }
 
+      buttons.current.forEach((button) => {
+        const isLandingOnButton =
+          velocityY.current >= 0 &&
+          posY.current + playerHeight <= button.y + 4 &&
+          posY.current + playerHeight + velocityY.current >= button.y &&
+          posX.current + playerWidth > button.x &&
+          posX.current < button.x + button.width;
+
+        if (isLandingOnButton && !button.isPressed) {
+          button.isPressed = true;
+          button.y += 5; // Se mantiene abajo
+
+          // Rebote del jugador
+          velocityY.current = -extraJumpStrength / 2;
+          isJumping.current = true;
+
+          // Activar objeto asociado
+          triggeredObjects.current.forEach((obj) => {
+            if (obj.id === button.id) {
+              obj.isActive = true;
+            }
+          });
+
+          setTick(t => t + 1); // Forzar re-render inmediato
+        }
+      });
+
+      triggeredObjects.current.forEach((obj) => {
+        if (obj.isActive && obj.y > obj.targetY) {
+          obj.y -= obj.speed;
+          if (obj.y <= obj.targetY) {
+            obj.y = obj.targetY;
+            obj.isActive = false; // opcional: detener la animación al llegar
+          }
+        }
+      });
+
       // Seguimiento de cámara (corregido)
       const halfScreen = window.innerWidth / 2;
       cameraOffsetX.current = Math.min(
@@ -703,7 +878,7 @@ function Stage2() {
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 transform: `translateX(${cameraOffsetX.current}px)`,
-                zIndex: 4,
+                zIndex: 5,
               }}
             />
           ))}
@@ -807,6 +982,119 @@ function Stage2() {
             />
           ))}
 
+          {/* Botones */}
+          {buttons.current.map((button, i) => (
+            <div
+              key={"btn" + i}
+              style={{
+                position: "fixed",
+                backgroundImage: `url(${BUTTONBOX})`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                left: button.x,
+                top: button.y + button.jumpOffset,
+                width: button.width,
+                height: button.height,
+                transform: `translateX(${cameraOffsetX.current}px)`,
+                transition: "top 0.15s",
+                zIndex: 4,
+              }}
+            />
+          ))}
+
+          {/* Objetos activados por botones */}
+          {triggeredObjects.current.map((obj, i) => (
+            <div
+              key={"obj" + i}
+              style={{
+                position: "fixed",
+                backgroundImage: `url(${obj.img})`,
+                backgroundSize: "cover",
+                backgroundRepeat: "no-repeat",
+                left: obj.x,
+                top: obj.y,
+                width: obj.width,
+                height: obj.height,
+                transform: `translateX(${cameraOffsetX.current}px)`,
+                transition: "top 0.15s",
+                zIndex: 3,
+                padding: "20px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center", // centra verticalmente si el div tiene espacio
+                textAlign: "center"
+              }}
+            >
+              <Typography
+                style={{
+                  fontFamily: '"Press Start 2P", monospace',
+                  fontSize: 10,
+                  color: "black",
+                  whiteSpace: "pre-line",
+                  lineHeight: "1.6",
+                  marginBottom: "8px",
+                  marginTop: "-25px"
+                }}
+              >
+                {obj.text}
+              </Typography>
+              <img src={obj.icon} alt="JS" style={{ width: "60px" }} />
+            </div>
+
+          ))}
+
+          {/**DIALOGO JS */}
+          { JavaScriptDialogue && 
+            <motion.div
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 300, opacity: 1 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              style={{
+                position: "absolute",
+                top: window.innerHeight - groundHeight - 430,
+                left: 600,
+                height: "250px",
+                backgroundColor: "#38002C",
+                border: "4px solid #F4C975",
+                borderRadius: "5px",
+                zIndex: 3,
+                transform: `translateX(${cameraOffsetX.current}px)`,
+                padding: "10px",
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                textAlign: "center",
+                position: "relative", // clave para posicionar la imagen internamente
+              }}
+            >
+              <Typography
+                style={{
+                  fontFamily: '"Press Start 2P", monospace',
+                  fontSize: 12,
+                  color: "white",
+                  whiteSpace: "pre-line",
+                  lineHeight: "1.6",
+                }}
+              >
+                {JStypedText}
+              </Typography>
+              <img
+                src={JAVASCRIPTICON}
+                alt="JS"
+                style={{
+                  width: "100px",
+                  position: "absolute",
+                  bottom: "10px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+              />
+            </motion.div>
+          }
+
           {/* Suelo azul */}
           <div
             style={{
@@ -839,7 +1127,7 @@ function Stage2() {
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
               animation: "float 2s ease-in-out infinite",
-              zIndex: 4,
+              zIndex: 6,
             }}
           />
 
