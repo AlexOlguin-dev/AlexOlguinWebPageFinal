@@ -119,7 +119,7 @@ function Stage1() {
   const [showedLife, setShowedLife] = useState(false);
   const [lifeCount,setLifeCount] = useState(99);
   const [lifeScreenOpacity, setLifeScreenOpacity] = useState(0);
-  const fullText = ` ¡Hola! Bienvenidos... Soy Alex Olguín, un desarrollador FullStack con sólida trayectoria, capaz de crear desde sitios livianos hasta plataformas complejas.\nCubriendo todo el ciclo de vida: análisis, arquitectura, desarrollo full‑stack y despliegue.`;
+  const fullText = ` ¡Hola! Bienvenidos... Soy Alex Olguín, un desarrollador FullStack con sólida trayectoria, capaz de crear desde sitios livianos hasta plataformas complejas.\nCubriendo todo el ciclo de vida: análisis, arquitectura, desarrollo FullStack y despliegue.`;
   const typedText = useTypewriter(activate_intro ? fullText : "", 50, 1200);
   const fullText2 = ` Este breve portafolio es una muestra de mi habilidad para transformar ideas en soluciones digitales de calidad.\nMe adapto rápido, aprendo nuevas tecnologías con entusiasmo y colaboro eficazmente para impulsar los objetivos del negocio.`;
   const typedText2 = useTypewriter(activate2 ? fullText2 : "", 45, 1200);

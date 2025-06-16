@@ -58,7 +58,7 @@ const extraJumpStrength = 4; // salto más pequeño al caer sobre enemigo
 const groundHeight = 0.3 * window.innerHeight;
 const playerWidth = 30;
 const playerHeight = 50;
-const groundWidth = 5000;
+const groundWidth = 7000;
 
 const useTypewriter = (text, speed = 50, delay = 800) => {
   const [displayedText, setDisplayedText] = useState("");
@@ -113,11 +113,26 @@ function Stage2() {
   const platforms = [
     { x: 280, y: window.innerHeight - groundHeight - 100, width: 120, height: 40, img: platform_triple },
     { x: 100, y: window.innerHeight - groundHeight - 200, width: 120, height: 40, img: platform_triple },
-    { x: 560, y: window.innerHeight - groundHeight - 200, width: 200, height: 40, img: platform_quintuple },
     { x: 1140, y: window.innerHeight - groundHeight - 100, width: 80, height: 40, img: platform_double },
     { x: 1240, y: window.innerHeight - groundHeight - 250, width: 40, height: 40, img: platform_una },
     { x: 1340, y: window.innerHeight - groundHeight - 350, width: 360, height: 40, img: platform_nonuple },
+    { x: 2340, y: window.innerHeight - groundHeight - 200, width: 80, height: 40, img: platform_double },
+    { x: 2340, y: window.innerHeight - groundHeight - 100, width: 120, height: 40, img: platform_triple },
+    { x: 3160, y: window.innerHeight - groundHeight - 100, width: 40, height: 40, img: platform_una },
+    { x: 2860, y: window.innerHeight - groundHeight - 200, width: 240, height: 40, img: platform_sixtuple },
+    { x: 3900, y: window.innerHeight - groundHeight - 200, width: 80, height: 40, img: platform_double },
+    { x: 3700, y: window.innerHeight - groundHeight - 300, width: 40, height: 40, img: platform_una },
+    { x: 3960, y: window.innerHeight - groundHeight - 100, width: 280, height: 40, img: platform_septuple },
+    { x: 5100, y: window.innerHeight - groundHeight - 250, width: 320, height: 40, img: platform_octuple },
   ];
+
+  const movingPlatforms = useRef([
+    { x: 560, y: window.innerHeight - groundHeight - 200, width: 200, height: 40, img: platform_quintuple, speed: 1, direction: 1, axis: "y", min: window.innerHeight - groundHeight - 200, max: window.innerHeight - groundHeight - 40},
+    { x: 2400, y: window.innerHeight - groundHeight - 350, width: 160, height: 40, img: platform_cuadruple, speed: 1.5, direction: 1, axis: "x", min: 2400, max: 2800 },
+    { x: 3240, y: window.innerHeight - groundHeight - 200, width: 40, height: 40, img: platform_una, speed: 1, direction: 1, axis: "y", min: window.innerHeight - groundHeight - 200, max: window.innerHeight - groundHeight - 40},
+    { x: 3460, y: window.innerHeight - groundHeight - 160, width: 80, height: 40, img: platform_double, speed: 1, direction: 1, axis: "y", min: window.innerHeight - groundHeight - 160, max: window.innerHeight - groundHeight - 40},
+    { x: 3800, y: window.innerHeight - groundHeight - 350, width: 120, height: 40, img: platform_triple, speed: 1.5, direction: 1, axis: "x", min: 3800, max: 4700 },
+  ]);
 
   // Obstáculos verdes fijos (no se mueven)
   const obstacles = [
@@ -125,9 +140,32 @@ function Stage2() {
     { x: 900, y: window.innerHeight - groundHeight - 120, width: 120, height: 120, img: obst2, zIndex: 5 },
     { x: 1020, y: window.innerHeight - groundHeight - 160, width: 120, height: 160, img: obst8, zIndex: 5 },
     { x: 1700, y: window.innerHeight - groundHeight - 80, width: 360, height: 80, img: obst6, zIndex: 5 },
+    { x: 2060, y: window.innerHeight - groundHeight - 160, width: 120, height: 160, img: obst8, zIndex: 5 },
+    { x: 2180, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 3200, y: window.innerHeight - groundHeight - 240, width: 40, height: 240, img: obst4, zIndex: 5 },
+    { x: 3500, y: window.innerHeight - groundHeight - 200, width: 40, height: 200, img: obst3, zIndex: 5 },
+    { x: 3540, y: window.innerHeight - groundHeight - 120, width: 360, height: 120, img: obst7, zIndex: 5 },
+    { x: 3780, y: window.innerHeight - groundHeight - 200, width: 120, height: 80, img: obst1, zIndex: 5 },
+    { x: 4780, y: window.innerHeight - groundHeight - 160, width: 240, height: 160, img: obst9, zIndex: 5 },
+    { x: 5680, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 5680, y: window.innerHeight - groundHeight - 480, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 5680, y: window.innerHeight - groundHeight - 720, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 5840, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 5840, y: window.innerHeight - groundHeight - 480, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 5840, y: window.innerHeight - groundHeight - 720, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 6000, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 6000, y: window.innerHeight - groundHeight - 480, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 6000,  y: window.innerHeight - groundHeight - 720, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 6160, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 6160, y: window.innerHeight - groundHeight - 480, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 6160,  y: window.innerHeight - groundHeight - 720, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 6320, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 6320, y: window.innerHeight - groundHeight - 480, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 6320,  y: window.innerHeight - groundHeight - 720, width: 160, height: 240, img: obst5, zIndex: 5 },
+    { x: 5600, y: window.innerHeight - groundHeight - 200, width: 80, height: 220, img: PIPEOUT, zIndex: 8 },
   ];
 
-  // Enemigos amarillos, con estado para color y desaparición
+   // Enemigos amarillos, con estado para color y desaparición
   const enemies = useRef([
   ]);
 
@@ -492,6 +530,53 @@ function Stage2() {
         }
       });
 
+      // 1. Mover plataformas móviles
+      movingPlatforms.current.forEach((plat) => {
+        if (plat.axis === "x") {
+          plat.x += plat.speed * plat.direction;
+          if (plat.x < plat.min || plat.x > plat.max) {
+            plat.direction *= -1;
+          }
+        } else if (plat.axis === "y") {
+          plat.y += plat.speed * plat.direction;
+          if (plat.y < plat.min || plat.y > plat.max) {
+            plat.direction *= -1;
+          }
+        }
+      });
+
+      // 2. Verificar si el jugador aterriza sobre una plataforma móvil
+      let landedOnMovingPlatform = false;
+
+      for (let platform of movingPlatforms.current) {
+        const nextBottom = posY.current + playerHeight + velocityY.current;
+
+        const isLanding =
+          velocityY.current >= 0 &&
+          posY.current + playerHeight <= platform.y + 4 && // Tolerancia de 4px
+          nextBottom >= platform.y &&
+          posX.current + playerWidth > platform.x &&
+          posX.current < platform.x + platform.width;
+
+        if (isLanding) {
+          // Ajustar posición exacta sobre la plataforma
+          posY.current = platform.y - playerHeight;
+          velocityY.current = 0;
+          isJumping.current = false;
+          jumpDirection.current = "none";
+          landedOnMovingPlatform = true;
+
+          // Mover jugador junto con la plataforma
+          if (platform.axis === "x") {
+            posX.current += platform.speed * platform.direction;
+          } else if (platform.axis === "y") {
+            posY.current += platform.speed * platform.direction;
+          }
+
+          break; // ya aterrizó en una plataforma, no sigue revisando otras
+        }
+      }
+
       // Seguimiento de cámara (corregido)
       const halfScreen = window.innerWidth / 2;
       cameraOffsetX.current = Math.min(
@@ -615,6 +700,26 @@ function Stage2() {
                 height: plat.height,
                 backgroundImage: `url(${plat.img})`,
                 backgroundSize: "cover", // o "contain" si prefieres que la imagen no se recorte
+                backgroundRepeat: "no-repeat",
+                backgroundPosition: "center",
+                transform: `translateX(${cameraOffsetX.current}px)`,
+                zIndex: 4,
+              }}
+            />
+          ))}
+
+          {/* Plataformas móviles */}
+          {movingPlatforms.current.map((plat, i) => (
+            <div
+              key={"movingplat" + i}
+              style={{
+                position: "fixed",
+                left: plat.x,
+                top: plat.y,
+                width: plat.width,
+                height: plat.height,
+                backgroundImage: `url(${plat.img})`,
+                backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 transform: `translateX(${cameraOffsetX.current}px)`,
