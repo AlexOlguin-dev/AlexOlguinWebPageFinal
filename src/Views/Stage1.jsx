@@ -117,7 +117,7 @@ function Stage1() {
   const [coinCount, setCoinCount] = useState(0);
   const [showLifeScreen, setShowLifeScreen] = useState(false);
   const [showedLife, setShowedLife] = useState(false);
-  const [lifeCount,setLifeCount] = useState(99);
+  const [lifeCount,setLifeCount] = useState(5);
   const [lifeScreenOpacity, setLifeScreenOpacity] = useState(0);
   const fullText = ` ¡Hola! Bienvenidos... Soy Alex Olguín, un desarrollador FullStack con sólida trayectoria, capaz de crear desde sitios livianos hasta plataformas complejas.\nCubriendo todo el ciclo de vida: análisis, arquitectura, desarrollo FullStack y despliegue.`;
   const typedText = useTypewriter(activate_intro ? fullText : "", 50, 1200);
@@ -313,6 +313,14 @@ function Stage1() {
   }, []);
 
   useEffect(() => {
+    localStorage.setItem("coinCount", coinCount);
+  },[coinCount])
+
+  useEffect(() => {
+    localStorage.setItem("lifeCount", lifeCount);
+  },[lifeCount])
+
+  useEffect(() => {
     const update = () => {
       if (!playerCanMove) {
         setTick((t) => t + 1);
@@ -488,7 +496,17 @@ function Stage1() {
           setPlayerCanMove(false);
           setPlayerColor(dead);
           setPlayerOpacity(1);
-          setLifeCount(prev => Math.max(prev - 1, 0)); // Resta 1 vida
+          setLifeCount((prev) => {
+            const newLife = prev - 1;
+            if (newLife <= 0) {
+              // Reinicio de vidas
+              setTimeout(() => {
+                setLifeCount(5);
+              }, 3000); // Espera a que termine la animación de muerte
+              return 0;
+            }
+            return newLife;
+          }); // Resta 1 vida
           setShowedLife(true); // Evita múltiples activaciones
 
           // Desaparece el jugador primero
@@ -953,7 +971,7 @@ function Stage1() {
                     backgroundPosition: "center",
                   }}
                 />
-                <span style={{ fontSize: "30px", fontFamily: '"Press Start 2P", monospace', }}>X {lifeCount}</span>
+                <span style={{ fontSize: "30px", fontFamily: '"Press Start 2P", monospace', }}>X{lifeCount}</span>
               </div>
             </div>
           )}
@@ -969,10 +987,16 @@ function Stage1() {
             zIndex: 10,
             display: "flex",
             alignItems: "center",
-            gap: "8px", // Espacio entre la imagen y el texto
+            gap: "8px",
           }}>
-            <img src={heartSprite} alt="coin" style={{ width: "30px", height: "30px" }} />
-            <Typography style={{ fontWeight: "bold", fontFamily: '"Press Start 2P", monospace' }}>X{lifeCount}</Typography>
+            {Array.from({ length: lifeCount }).map((_, index) => (
+              <img
+                key={index}
+                src={heartSprite}
+                alt="heart"
+                style={{ width: "30px", height: "30px" }}
+              />
+            ))}
           </div>
 
           {/**contador monedas */}

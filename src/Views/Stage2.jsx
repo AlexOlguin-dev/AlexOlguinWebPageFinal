@@ -126,14 +126,14 @@ function Stage2() {
   const [playerCanMove, setPlayerCanMove] = useState(true);
   const [playerOpacity, setPlayerOpacity] = useState(1);
   const [isGoingDownPipe, setIsGoingDownPipe] = useState(false);
-  const [coinCount, setCoinCount] = useState(0);
+  const [coinCount, setCoinCount] = useState(parseInt(localStorage.getItem("coinCount")));
   const [showLifeScreen, setShowLifeScreen] = useState(false);
   const [showedLife, setShowedLife] = useState(false);
-  const [lifeCount,setLifeCount] = useState(99);
+  const [lifeCount,setLifeCount] = useState(parseInt(localStorage.getItem("lifeCount")));
   const [lifeScreenOpacity, setLifeScreenOpacity] = useState(0);
   const [JavaScriptDialogue, setJavaScriptDialogue] = useState(false);
   const [PHPDialogue, setPHPDialogue] = useState(false);
-  const JSfullText = ` Tengo más de cinco años trabajando en el ecosistema JavaScript, cubriendo de punta a punta la creación de aplicaciones web y móviles`;
+  const JSfullText = ` Tengo más de cinco años trabajando en el ecosistema JavaScript, cubriendo de punta a punta la creación de aplicaciones web y móviles.`;
   const JStypedText = useTypewriter(JavaScriptDialogue ? JSfullText : "", 50, 1200);
   const PHPfullText = ` Cuento con sólida experiencia en PHP, enfocada en el diseño y despliegue de Back‑Ends robustos con implementacion de systemas de seguridad y validacion de datos.`;
   const PHPtypedText = useTypewriter(PHPDialogue ? PHPfullText : "", 50, 1200);
@@ -203,6 +203,66 @@ function Stage2() {
 
    // Enemigos amarillos, con estado para color y desaparición
   const enemies = useRef([
+    {
+      x: 750,
+      y: window.innerHeight - groundHeight - playerHeight + 15,
+      width: 50,
+      height: 37,
+      speed: 1,
+      minX: 750,
+      maxX: 850,
+      direction: 1,
+      isHit: false, // para saber si está "rojo"
+      hitTimeout: null,
+    },
+    {
+      x: 875,
+      y: window.innerHeight - groundHeight - playerHeight - 105,
+      width: 50,
+      height: 37,
+      speed: 1,
+      minX: 875,
+      maxX: 970,
+      direction: -1,
+      isHit: false, // para saber si está "rojo"
+      hitTimeout: null,
+    },
+    {
+      x: 1330,
+      y: window.innerHeight - groundHeight - playerHeight - 335,
+      width: 50,
+      height: 37,
+      speed: 1,
+      minX: 1330,
+      maxX: 1660,
+      direction: -1,
+      isHit: false, // para saber si está "rojo"
+      hitTimeout: null,
+    },
+    {
+      x: 1660,
+      y: window.innerHeight - groundHeight - playerHeight - 335,
+      width: 50,
+      height: 37,
+      speed: 1,
+      minX: 1330,
+      maxX: 1660,
+      direction: 1,
+      isHit: false, // para saber si está "rojo"
+      hitTimeout: null,
+    },
+    {
+      x: 2130,
+      y: window.innerHeight - groundHeight - playerHeight - 145,
+      width: 50,
+      height: 37,
+      speed: 1,
+      minX: 2070,
+      maxX: 2130,
+      direction: 1,
+      isHit: false, // para saber si está "rojo"
+      hitTimeout: null,
+    },
   ]);
 
   const boxes = useRef([
@@ -221,7 +281,7 @@ function Stage2() {
     },
     {
       x: 3350,
-      y: window.innerHeight - groundHeight - 200,
+      y: window.innerHeight - groundHeight - 150,
       width: 40,
       height: 40,
       isHit: false,
@@ -235,6 +295,32 @@ function Stage2() {
   ]);
 
   const [coins, setCoins] = useState([
+    { x: 280, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
+    { x: 310, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
+    { x: 340, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
+    { x: 370, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
+    { x: 100, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
+    { x: 130, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
+    { x: 160, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
+    { x: 190, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
+    { x: 1150, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 1180, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 1210, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 1240, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 1700, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 1730, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 1760, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 1790, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 1820, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 1850, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 1880, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 1910, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 1940, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 2965, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
+    { x: 2995, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
+    { x: 3025, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
+    { x: 3055, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
+    { x: 3085, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
   ]);
 
   useEffect(() => {
@@ -299,6 +385,14 @@ function Stage2() {
       window.removeEventListener("keyup", handleKeyUp);
     };
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("coinCount", coinCount);
+  },[coinCount])
+  
+  useEffect(() => {
+    localStorage.setItem("lifeCount", lifeCount);
+  },[lifeCount])
 
   useEffect(() => {
     const update = () => {
@@ -476,7 +570,17 @@ function Stage2() {
           setPlayerCanMove(false);
           setPlayerColor(dead);
           setPlayerOpacity(1);
-          setLifeCount(prev => Math.max(prev - 1, 0)); // Resta 1 vida
+          setLifeCount((prev) => {
+            const newLife = prev - 1;
+            if (newLife <= 0) {
+              // Reinicio de vidas
+              setTimeout(() => {
+                setLifeCount(5);
+              }, 3000); // Espera a que termine la animación de muerte
+              return 0;
+            }
+            return newLife;
+          }); // Resta 1 vida
           setShowedLife(true); // Evita múltiples activaciones
 
           // Desaparece el jugador primero
@@ -1046,7 +1150,7 @@ function Stage2() {
               transition={{ duration: 1.2, ease: "easeOut" }}
               style={{
                 position: "absolute",
-                top: window.innerHeight - groundHeight - 700,
+                top: window.innerHeight - groundHeight - ( JavaScriptDialogue ? 740 : 450),
                 left: 3200,
                 height: "250px",
                 backgroundColor: "#38002C",
@@ -1158,7 +1262,7 @@ function Stage2() {
                     backgroundPosition: "center",
                   }}
                 />
-                <span style={{ fontSize: "30px", fontFamily: '"Press Start 2P", monospace', }}>X {lifeCount}</span>
+                <span style={{ fontSize: "30px", fontFamily: '"Press Start 2P", monospace', }}>X{lifeCount}</span>
               </div>
             </div>
           )}
@@ -1174,10 +1278,16 @@ function Stage2() {
             zIndex: 10,
             display: "flex",
             alignItems: "center",
-            gap: "8px", // Espacio entre la imagen y el texto
+            gap: "8px",
           }}>
-            <img src={heartSprite} alt="coin" style={{ width: "30px", height: "30px" }} />
-            <Typography style={{ fontWeight: "bold", fontFamily: '"Press Start 2P", monospace' }}>X{lifeCount}</Typography>
+            {Array.from({ length: lifeCount }).map((_, index) => (
+              <img
+                key={index}
+                src={heartSprite}
+                alt="heart"
+                style={{ width: "30px", height: "30px" }}
+              />
+            ))}
           </div>
 
           {/**contador monedas */}
