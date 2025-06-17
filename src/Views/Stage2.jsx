@@ -19,18 +19,22 @@ import BUTTONBOX from '../assets/img/map/decorations/Button.png';
 import SCREEN from '../assets/img/map/decorations/Screen.png';
 import SCREEN2 from '../assets/img/map/decorations/Screen2.png';
 import SCREEN3 from '../assets/img/map/decorations/Screen3.png';
+import SCREEN4 from '../assets/img/map/decorations/Screen4.png';
 import CRANEBASE1 from '../assets/img/map/decorations/Crane/Base1.png';
 import CRANEBASE2 from '../assets/img/map/decorations/Crane/Base2.png';
 import CRANEBASE3 from '../assets/img/map/decorations/Crane/Base3.png';
 import CRANEARM1 from '../assets/img/map/decorations/Crane/Crane1.png';
 import CRANEARM2 from '../assets/img/map/decorations/Crane/Crane2.png';
 import CRANEARM3 from '../assets/img/map/decorations/Crane/Crane3.png';
+import CRANEARM4 from '../assets/img/map/decorations/Crane/Crane4.png';
 //LENGUAJES
 import JAVASCRIPTICON from '../assets/img/map/decorations/Lenguajes/javascript.png';
 import REACTICON from '../assets/img/map/decorations/Lenguajes/react.png';
 import JQUERY from '../assets/img/map/decorations/Lenguajes/jquery.png';
 import MUI from '../assets/img/map/decorations/Lenguajes/mui.png';
-import PHPICON from '../assets/img/map/decorations/Lenguajes/php.png'
+import PHPICON from '../assets/img/map/decorations/Lenguajes/php.png';
+import LARAVEL from '../assets/img/map/decorations/Lenguajes/laravel.png';
+import NGINX from '../assets/img/map/decorations/Lenguajes/nginx.png';
 //BOXES
 import JAVASCRIPT from '../assets/img/map/decorations/JavaScriptBox.png';
 import JAVASCRIPT_OFF from '../assets/img/map/decorations/JavaScriptBox_off.png';
@@ -81,7 +85,7 @@ const extraJumpStrength = 4; // salto más pequeño al caer sobre enemigo
 const groundHeight = 0.3 * window.innerHeight;
 const playerWidth = 30;
 const playerHeight = 50;
-const groundWidth = 7000;
+const groundWidth = 10000;
 
 const useTypewriter = (text, speed = 50, delay = 800) => {
   const [displayedText, setDisplayedText] = useState("");
@@ -133,6 +137,7 @@ function Stage2() {
   const [lifeScreenOpacity, setLifeScreenOpacity] = useState(0);
   const [JavaScriptDialogue, setJavaScriptDialogue] = useState(false);
   const [PHPDialogue, setPHPDialogue] = useState(false);
+  const [PythonDialogye,setPythonDialogue] = useState(false);
   const JSfullText = ` Tengo más de cinco años trabajando en el ecosistema JavaScript, cubriendo de punta a punta la creación de aplicaciones web y móviles.`;
   const JStypedText = useTypewriter(JavaScriptDialogue ? JSfullText : "", 50, 1200);
   const PHPfullText = ` Cuento con sólida experiencia en PHP, enfocada en el diseño y despliegue de Back‑Ends robustos con implementacion de systemas de seguridad y validacion de datos.`;
@@ -143,7 +148,7 @@ function Stage2() {
     { x: 280, y: window.innerHeight - groundHeight - 100, width: 120, height: 40, img: platform_triple },
     { x: 100, y: window.innerHeight - groundHeight - 200, width: 120, height: 40, img: platform_triple },
     { x: 1140, y: window.innerHeight - groundHeight - 100, width: 80, height: 40, img: platform_double },
-    { x: 1240, y: window.innerHeight - groundHeight - 250, width: 40, height: 40, img: platform_una },
+    { x: 1210, y: window.innerHeight - groundHeight - 250, width: 40, height: 40, img: platform_una },
     { x: 1340, y: window.innerHeight - groundHeight - 350, width: 360, height: 40, img: platform_nonuple },
     { x: 2340, y: window.innerHeight - groundHeight - 200, width: 80, height: 40, img: platform_double },
     { x: 2340, y: window.innerHeight - groundHeight - 100, width: 120, height: 40, img: platform_triple },
@@ -153,6 +158,7 @@ function Stage2() {
     { x: 3700, y: window.innerHeight - groundHeight - 300, width: 40, height: 40, img: platform_una },
     { x: 3960, y: window.innerHeight - groundHeight - 100, width: 280, height: 40, img: platform_septuple },
     { x: 5100, y: window.innerHeight - groundHeight - 240, width: 320, height: 40, img: platform_octuple },
+    { x: 5900, y: window.innerHeight - groundHeight - 100, width: 120, height: 40, img: platform_triple },
   ];
 
   const movingPlatforms = useRef([
@@ -165,40 +171,53 @@ function Stage2() {
 
   // Obstáculos verdes fijos (no se mueven)
   const obstacles = [
-    { x: 400, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 900, y: window.innerHeight - groundHeight - 120, width: 120, height: 120, img: obst2, zIndex: 5 },
-    { x: 1020, y: window.innerHeight - groundHeight - 160, width: 120, height: 160, img: obst8, zIndex: 5 },
-    { x: 1700, y: window.innerHeight - groundHeight - 80, width: 360, height: 80, img: obst6, zIndex: 5 },
-    { x: 2060, y: window.innerHeight - groundHeight - 160, width: 120, height: 160, img: obst8, zIndex: 5 },
-    { x: 2180, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 3200, y: window.innerHeight - groundHeight - 240, width: 40, height: 240, img: obst4, zIndex: 5 },
-    { x: 3500, y: window.innerHeight - groundHeight - 200, width: 40, height: 200, img: obst3, zIndex: 5 },
-    { x: 3540, y: window.innerHeight - groundHeight - 120, width: 360, height: 120, img: obst7, zIndex: 5 },
-    { x: 3780, y: window.innerHeight - groundHeight - 200, width: 120, height: 80, img: obst1, zIndex: 5 },
-    { x: 4780, y: window.innerHeight - groundHeight - 160, width: 240, height: 160, img: obst9, zIndex: 5 },
-    { x: 5420, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 5 },
-    { x: 5020, y: window.innerHeight - groundHeight - 80, width: 120, height: 80, img: obst1, zIndex: 5 },
+    { x: 400, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 6 },
+    { x: 900, y: window.innerHeight - groundHeight - 120, width: 120, height: 120, img: obst2, zIndex: 6 },
+    { x: 1020, y: window.innerHeight - groundHeight - 160, width: 120, height: 160, img: obst8, zIndex: 6 },
+    { x: 1700, y: window.innerHeight - groundHeight - 80, width: 360, height: 80, img: obst6, zIndex: 6 },
+    { x: 2060, y: window.innerHeight - groundHeight - 160, width: 120, height: 160, img: obst8, zIndex: 6 },
+    { x: 2180, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 6 },
+    { x: 3200, y: window.innerHeight - groundHeight - 240, width: 40, height: 240, img: obst4, zIndex: 6 },
+    { x: 3500, y: window.innerHeight - groundHeight - 200, width: 40, height: 200, img: obst3, zIndex: 6 },
+    { x: 3540, y: window.innerHeight - groundHeight - 120, width: 360, height: 120, img: obst7, zIndex: 6 },
+    { x: 3780, y: window.innerHeight - groundHeight - 200, width: 120, height: 80, img: obst1, zIndex: 6 },
+    { x: 4780, y: window.innerHeight - groundHeight - 160, width: 240, height: 160, img: obst9, zIndex: 6 },
+    { x: 5420, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 6 },
+    { x: 5020, y: window.innerHeight - groundHeight - 80, width: 120, height: 80, img: obst1, zIndex: 6 },
+    { x: 5580, y: window.innerHeight - groundHeight - 120, width: 120, height: 120, img: obst2, zIndex: 6 },
+    { x: 6060, y: window.innerHeight - groundHeight - 160, width: 120, height: 160, img: obst8, zIndex: 6 },
+    { x: 6180, y: window.innerHeight - groundHeight - 240, width: 160, height: 240, img: obst5, zIndex: 6 },
+    { x: 6800, y: window.innerHeight - groundHeight - 240, width: 40, height: 240, img: obst4, zIndex: 6 },
+    { x: 6840, y: window.innerHeight - groundHeight - 120, width: 360, height: 120, img: obst7, zIndex: 6 },
   ];
 
   const buttons = useRef([
     { id: "btn1", x: 1050, y: window.innerHeight - groundHeight - 175, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
-    { id: "btn2", x: 2200, y: window.innerHeight - groundHeight - 255, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
+    /*{ id: "btn2", x: 2200, y: window.innerHeight - groundHeight - 255, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
     { id: "btn3", x: 3000, y: window.innerHeight - groundHeight - 15, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
+    { id: "btn4", x: 3800, y: window.innerHeight - groundHeight - 215, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
+    { id: "btn5", x: 5050, y: window.innerHeight - groundHeight - 95, width: 60, height: 20, isPressed: false, jumpOffset: 0 },*/
   ]);
 
   const cranes = [
-    { x: 1250, y: window.innerHeight - groundHeight - 350, width: 100, height: 350, img: CRANEBASE1, zIndex: 4 },
-    { x: 1950, y: window.innerHeight - groundHeight - 430, width: 100, height: 350, img: CRANEBASE1, zIndex: 4 },
+    { x: 1130, y: window.innerHeight - groundHeight - 350, width: 100, height: 350, img: CRANEBASE1, zIndex: 4 },
+    /*{ x: 1950, y: window.innerHeight - groundHeight - 430, width: 100, height: 350, img: CRANEBASE1, zIndex: 4 },
     { x: 2440, y: window.innerHeight - groundHeight - 540, width: 100, height: 540, img: CRANEBASE3, zIndex: 4 },
+    { x: 4140, y: window.innerHeight - groundHeight - 350, width: 100, height: 350, img: CRANEBASE1, zIndex: 4 },
+    { x: 4700, y: window.innerHeight - groundHeight - 540, width: 100, height: 540, img: CRANEBASE3, zIndex: 4 },*/
   ]
 
   const triggeredObjects = useRef([
-    { id: "btn1", x: 1280, y: window.innerHeight - groundHeight - 120, targetY: window.innerHeight - groundHeight - 300, width: 230, height: 80,  speed: 3.5, direction: "up", isActive: false, img: CRANEARM1, text: "", icon: null, img_width: 0},
-    { id: "btn1", x: 1380, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 235, width: 230, height: 200,  speed: 4, direction: "up", isActive: false, img: SCREEN, text: "Construyo interfaces dinámicas con React JS y Node JS para plataformas web altamente interactivas.", icon: REACTICON, img_width: "100px" },
-    { id: "btn2", x: 1755, y: window.innerHeight - groundHeight - 200, targetY: window.innerHeight - groundHeight - 390, width: 230, height: 120,  speed: 3, direction: "up", isActive: false, img: CRANEARM2, text: "", icon: null, img_width: 0},
-    { id: "btn2", x: 1735, y: window.innerHeight - groundHeight - 80, targetY: window.innerHeight - groundHeight - 340, width: 200, height: 240,  speed: 4, direction: "up", isActive: false, img: SCREEN2, text: "Manejo de JQuery para integracion de funciones API REST u otras funciones web de utilidad.", icon: JQUERY, img_width: "60px" },
-    { id: "btn3", x: 2465, y: window.innerHeight - groundHeight - 80, targetY: window.innerHeight - groundHeight - 450, width: 500, height: 120,  speed: 3, direction: "up", isActive: false, img: CRANEARM3, text: "", icon: null, img_width: 0},
-    { id: "btn3", x: 2570, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 300, width: 360, height: 200,  speed: 2.5, direction: "up", isActive: false, img: SCREEN3, text: "Diseño de UI accesibles e interactivas 100% responsivas para desktop y mobil con diseño y navegacion horientada a la comodidad del usuario.", icon: MUI, img_width: "100px"},
+    { id: "btn1", x: 1160, y: window.innerHeight - groundHeight - 120, targetY: window.innerHeight - groundHeight - 300, width: 230, height: 80, speed: 3.5, direction: "up", isActive: false, img: CRANEARM1, text: "", icon: null, img_width: 0, fontSize: 12},
+    { id: "btn1", x: 1220, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 240, width: 400, height: 195, speed: 4, direction: "up", isActive: false, img: SCREEN, text: "-> Construyo interfaces dinámicas con React JS y Node JS para plataformas web altamente interactivas.\n\n-> Manejo de JQuery para integracion de funciones API REST u otras funciones web de utilidad.\n\n-> Diseño de UI accesibles e interactivas 100% responsivas para desktop y mobil con diseño y navegacion horientada a la comodidad del usuario.", icon: REACTICON, img_width: "200px", fontSize: 8, marginTop: "20px" },
+    /*{ id: "btn2", x: 1755, y: window.innerHeight - groundHeight - 200, targetY: window.innerHeight - groundHeight - 390, width: 230, height: 120, speed: 3, direction: "up", isActive: false, img: CRANEARM2, text: "", icon: null, img_width: 0, fontSize: 12},
+    { id: "btn2", x: 1735, y: window.innerHeight - groundHeight - 80, targetY: window.innerHeight - groundHeight - 340, width: 200, height: 240, speed: 4, direction: "up", isActive: false, img: SCREEN2, text: "Manejo de JQuery para integracion de funciones API REST u otras funciones web de utilidad.", icon: JQUERY, img_width: "60px", fontSize: 10 },
+    { id: "btn3", x: 2465, y: window.innerHeight - groundHeight - 80, targetY: window.innerHeight - groundHeight - 450, width: 400, height: 90, speed: 3, direction: "up", isActive: false, img: CRANEARM3, text: "", icon: null, img_width: 0, fontSize: 12},
+    { id: "btn3", x: 2560, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 350, width: 360, height: 200, speed: 2.7, direction: "up", isActive: false, img: SCREEN3, text: "Diseño de UI accesibles e interactivas 100% responsivas para desktop y mobil con diseño y navegacion horientada a la comodidad del usuario.", icon: MUI, img_width: "100px", fontSize: 10 },
+    { id: "btn4", x: 4169, y: window.innerHeight - groundHeight - 120, targetY: window.innerHeight - groundHeight - 315, width: 240, height: 85, speed: 3, direction: "up", isActive: false, img: CRANEARM4, text: "", icon: null, img_width: 0, fontSize: 12},
+    { id: "btn4", x: 4200, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 235, width: 230, height: 200, speed: 4, direction: "up", isActive: false, img: SCREEN, text: "Desarrollo APIs y servicios escalables, aplicando el ecosistema Laravel para autenticación y migraciones o Lumen cuando se requiere máxima ligereza y velocidad.", icon: LARAVEL, img_width: "100px", fontSize: 8 },
+    { id: "btn5", x: 4517, y: window.innerHeight - groundHeight - 115, targetY: window.innerHeight - groundHeight - 415, width: 215, height: 120, speed: 4, direction: "up", isActive: false, img: CRANEARM2, text: "", icon: null, img_width: 0, fontSize: 12},
+    { id: "btn5", x: 4480, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 350, width: 215, height: 300, speed: 3.9, direction: "up", isActive: false, img: SCREEN4, text: "Configuro servidores backend en máquinas virtuales, orquestando Nginx como reverse proxy y servidor web para garantizar rendimiento, seguridad y balanceo eficiente.", icon: NGINX, img_width: "60px", fontSize: 10},*/
   ]);
 
    // Enemigos amarillos, con estado para color y desaparición
@@ -292,6 +311,19 @@ function Stage2() {
       imgON: PHP,
       imgOFF: PHP_OFF
     },
+    {
+      x: 5200,
+      y: window.innerHeight - groundHeight - 400,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        setPythonDialogue(true)
+      },
+      imgON: PYTHON,
+      imgOFF: PYTHON_OFF
+    },
   ]);
 
   const [coins, setCoins] = useState([
@@ -303,10 +335,6 @@ function Stage2() {
     { x: 130, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
     { x: 160, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
     { x: 190, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
-    { x: 1150, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
-    { x: 1180, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
-    { x: 1210, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
-    { x: 1240, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
     { x: 1700, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
     { x: 1730, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
     { x: 1760, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
@@ -321,6 +349,20 @@ function Stage2() {
     { x: 3025, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
     { x: 3055, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
     { x: 3085, y: window.innerHeight - groundHeight - 230, width: 20, height: 24 },
+    { x: 3285, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 3315, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 3345, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 3375, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 3405, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 3435, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 3435, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 3970, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
+    { x: 4000, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
+    { x: 4030, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
+    { x: 4060, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
+    { x: 4090, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
+    { x: 4120, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
+    { x: 4150, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
   ]);
 
   useEffect(() => {
@@ -926,7 +968,7 @@ function Stage2() {
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 transform: `translateX(${cameraOffsetX.current}px)`,
-                zIndex: 4,
+                zIndex: 5,
               }}
             />
           ))}
@@ -1025,7 +1067,7 @@ function Stage2() {
                 height: button.height,
                 transform: `translateX(${cameraOffsetX.current}px)`,
                 transition: "top 0.15s",
-                zIndex: 4,
+                zIndex: 5,
               }}
             />
           ))}
@@ -1076,12 +1118,11 @@ function Stage2() {
               <Typography
                 style={{
                   fontFamily: '"Press Start 2P", monospace',
-                  fontSize: 10,
+                  fontSize: obj.fontSize,
                   color: "black",
                   whiteSpace: "pre-line",
                   lineHeight: "1.6",
-                  marginBottom: "8px",
-                  marginTop: "-25px"
+                  marginBottom: "8px"
                 }}
               >
                 {obj.text}
