@@ -24,6 +24,15 @@ import CRANEBASE3 from '../assets/img/map/decorations/Crane/Base3.png';
 import CRANEARM1 from '../assets/img/map/decorations/Crane/Crane1.png';
 import CRANEARM2 from '../assets/img/map/decorations/Crane/Crane2.png';
 import CRANEARM3 from '../assets/img/map/decorations/Crane/Crane3.png';
+import BARRIL1 from '../assets/img/map/decorations/barril24.png';
+import BARRIL2 from '../assets/img/map/decorations/barrill25.png';
+import TOWER1 from '../assets/img/map/decorations/tower1.png';
+import TOWER2 from '../assets/img/map/decorations/tower2.png';
+import TOWER3 from '../assets/img/map/decorations/tower3.png';
+import TOWER4 from '../assets/img/map/decorations/tower4.png';
+import MOTOR from '../assets/img/map/decorations/motor26.png';
+import GENERATOR from '../assets/img/map/decorations/generador27.png';
+import TUBO from '../assets/img/map/decorations/tubo4.png';
 //LENGUAJES
 import JAVASCRIPTICON from '../assets/img/map/decorations/Lenguajes/javascript.png';
 import REACTICON from '../assets/img/map/decorations/Lenguajes/react.png';
@@ -215,7 +224,7 @@ function Stage2() {
     { id: "btn4", x: 4169, y: window.innerHeight - groundHeight - 120, targetY: window.innerHeight - groundHeight - 315, width: 240, height: 85, speed: 3, direction: "up", isActive: false, img: CRANEARM1, text: "", icon: null, img_width: 0, fontSize: 12},
     { id: "btn4", x: 4220, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 245, width: 400, height: 195, speed: 4, direction: "up", isActive: false, img: SCREEN, text: "->Creo interfaces locales que almacenan y gestionan datos de forma fiable.\n\n->Manejo Pandas y Matplotlib para transformar y exponer información con claridad usando Dataframes de data.\n\n->Construyo APIs y servicios robustos con Django (stack completo) y FastAPI (alto rendimiento).", icon: DJANGO, img_width: "150px", fontSize: 8 },
     { id: "btn5", x: 5777, y: window.innerHeight - groundHeight - 115, targetY: window.innerHeight - groundHeight - 415, width: 215, height: 120, speed: 4, direction: "up", isActive: false, img: CRANEARM2, text: "", icon: null, img_width: 0, fontSize: 12},
-    { id: "btn5", x: 5740, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 350, width: 215, height: 300, speed: 3.9, direction: "up", isActive: false, img: SCREEN4, text: "->Levanto y administro servidores mediante XAMPP y WAMP, definiendo usuarios, respaldos, replicación y ajustes de rendimiento para entornos de desarrollo y pruebas.\n\n->Configuro instancias en servidores web o máquinas virtuales, asegurando conexión segura (SSL, roles) y abasteciendo back‑ends REST/GraphQL con datos consistentes y de alta disponibilidad.", icon: POSTGRESQL, img_width: "100px", fontSize: 8}
+    { id: "btn5", x: 5740, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 350, width: 215, height: 302, speed: 3.9, direction: "up", isActive: false, img: SCREEN4, text: "->Levanto y administro servidores mediante XAMPP y WAMP, definiendo usuarios, respaldos, replicación y ajustes de rendimiento para entornos de desarrollo y pruebas.\n\n->Configuro instancias en servidores web o máquinas virtuales, asegurando conexión segura (SSL, roles) y abasteciendo back‑ends REST/GraphQL con datos consistentes y de alta disponibilidad.", icon: POSTGRESQL, img_width: "100px", fontSize: 8}
   ]);
 
    // Enemigos amarillos, con estado para color y desaparición
@@ -280,6 +289,30 @@ function Stage2() {
       isHit: false, // para saber si está "rojo"
       hitTimeout: null,
     },
+    {
+      x: 3540,
+      y: window.innerHeight - groundHeight - playerHeight - 110,
+      width: 50,
+      height: 37,
+      speed: 1,
+      minX: 3540,
+      maxX: 3700,
+      direction: 1,
+      isHit: false, // para saber si está "rojo"
+      hitTimeout: null,
+    },
+    {
+      x: 3950,
+      y: window.innerHeight - groundHeight - playerHeight + 15,
+      width: 50,
+      height: 37,
+      speed: 1,
+      minX: 3950,
+      maxX: 4500,
+      direction: 1,
+      isHit: false, // para saber si está "rojo" 
+      hitTimeout: null,
+    }
   ]);
 
   const boxes = useRef([
@@ -374,7 +407,20 @@ function Stage2() {
     { x: 4090, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
     { x: 4120, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
     { x: 4150, y: window.innerHeight - groundHeight - 130, width: 20, height: 24 },
-  ]);
+    { x: 5030, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 5060, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 5090, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 5120, y: window.innerHeight - groundHeight - 110, width: 20, height: 24 },
+    { x: 5150, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 5180, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 5210, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 5240, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 5270, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 5300, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 5330, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 5360, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+    { x: 5390, y: window.innerHeight - groundHeight - 30, width: 20, height: 24 },
+   ]);
 
   useEffect(() => {
     function handleResize() {
@@ -1020,7 +1066,7 @@ function Stage2() {
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
                 transform: `translateX(${cameraOffsetX.current}px)`,
-                zIndex: 4,
+                zIndex: 5,
               }}
             />
           ))}
@@ -1253,7 +1299,7 @@ function Stage2() {
               transition={{ duration: 1.2, ease: "easeOut" }}
               style={{
                 position: "absolute",
-                top: window.innerHeight - groundHeight - (JavaScriptDialogue ? PHPDialogue ? 1000 : 740 : 455),
+                top: window.innerHeight - groundHeight - (JavaScriptDialogue ? PHPDialogue ? 1000 : 740 : PHPDialogue ? 740 : 455),
                 left: 3200,
                 height: "220px",
                 backgroundColor: "#38002C",
@@ -1304,7 +1350,7 @@ function Stage2() {
               transition={{ duration: 1.2, ease: "easeOut" }}
               style={{
                 position: "absolute",
-                top: window.innerHeight - groundHeight - (JavaScriptDialogue ? PHPDialogue ? PythonDialogye ? 1230: 1000 : 950 : PHPDialogue ? 740 : PythonDialogye ? 675 : 455),
+                top: window.innerHeight - groundHeight - (JavaScriptDialogue ? PHPDialogue ? PythonDialogye ? 1230: 1000 : 950 : PHPDialogue ? PythonDialogye ? 960 : 740 : PythonDialogye ? 675 : 455),
                 left: 4750,
                 height: "220px",
                 backgroundColor: "#38002C",
@@ -1460,6 +1506,206 @@ function Stage2() {
             <img src={coinSprite} alt="coin" style={{ width: "24px", height: "24px" }} />
             <Typography style={{ fontWeight: "bold", fontFamily: '"Press Start 2P", monospace' }}>X{coinCount}</Typography>
           </div>
+
+          {/**DECORACIONES */}
+          <img 
+            src={TOWER4} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 190, 
+              left: 50, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BARRIL1} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 175, 
+              left: 310, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={MOTOR} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 285, 
+              left: 400, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TOWER3} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 190, 
+              left: 600, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={GENERATOR} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 150, 
+              left: 920, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TOWER1} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 388, 
+              left: 1620, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TUBO} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 42, 
+              left: 1580, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BARRIL2} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 155, 
+              left: 1980, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TOWER3} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 430, 
+              left: 2250, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TUBO} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 42, 
+              left: 2650, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={MOTOR} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 148, 
+              left: 2360, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BARRIL2} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 275, 
+              left: 3050, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TOWER4} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 310, 
+              left: 3550, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TUBO} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 42, 
+              left: 4000, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={GENERATOR} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 36, 
+              left: 4500, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={BARRIL1} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 76, 
+              left: 4600, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={TOWER4} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 430, 
+              left: 5450, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+          <img 
+            src={MOTOR} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 47, 
+              left: 5700, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
 
           {/* CONTROLES TÁCTILES */}
           { isMobile && 
