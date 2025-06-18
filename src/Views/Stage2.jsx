@@ -17,24 +17,22 @@ import CONTROLUP from '../assets/img/controlUp.png';
 import CONTROLDOWN from '../assets/img/controlDown.png';
 import BUTTONBOX from '../assets/img/map/decorations/Button.png';
 import SCREEN from '../assets/img/map/decorations/Screen.png';
-import SCREEN2 from '../assets/img/map/decorations/Screen2.png';
 import SCREEN3 from '../assets/img/map/decorations/Screen3.png';
 import SCREEN4 from '../assets/img/map/decorations/Screen4.png';
 import CRANEBASE1 from '../assets/img/map/decorations/Crane/Base1.png';
-import CRANEBASE2 from '../assets/img/map/decorations/Crane/Base2.png';
 import CRANEBASE3 from '../assets/img/map/decorations/Crane/Base3.png';
 import CRANEARM1 from '../assets/img/map/decorations/Crane/Crane1.png';
 import CRANEARM2 from '../assets/img/map/decorations/Crane/Crane2.png';
 import CRANEARM3 from '../assets/img/map/decorations/Crane/Crane3.png';
-import CRANEARM4 from '../assets/img/map/decorations/Crane/Crane4.png';
 //LENGUAJES
 import JAVASCRIPTICON from '../assets/img/map/decorations/Lenguajes/javascript.png';
 import REACTICON from '../assets/img/map/decorations/Lenguajes/react.png';
-import JQUERY from '../assets/img/map/decorations/Lenguajes/jquery.png';
-import MUI from '../assets/img/map/decorations/Lenguajes/mui.png';
 import PHPICON from '../assets/img/map/decorations/Lenguajes/php.png';
 import LARAVEL from '../assets/img/map/decorations/Lenguajes/laravel.png';
-import NGINX from '../assets/img/map/decorations/Lenguajes/nginx.png';
+import PYTHONICON from '../assets/img/map/decorations/Lenguajes/python.png';
+import DJANGO from '../assets/img/map/decorations/Lenguajes/django.png';
+import MYSQLICON from '../assets/img/map/decorations/Lenguajes/mysql.png';
+import POSTGRESQL from '../assets/img/map/decorations/Lenguajes/postgresql.png';
 //BOXES
 import JAVASCRIPT from '../assets/img/map/decorations/JavaScriptBox.png';
 import JAVASCRIPT_OFF from '../assets/img/map/decorations/JavaScriptBox_off.png';
@@ -50,7 +48,6 @@ import platform_double from '../assets/img/map/plataforma_doble_stage2.png';
 import platform_triple from '../assets/img/map/plataforma_triple_stage2.png';
 import platform_cuadruple from '../assets/img/map/plataforma_cuadruple_stage2.png';
 import platform_quintuple from '../assets/img/map/plataforma_quintuple_stage2.png';
-import platform_sixtuple from '../assets/img/map/plataforma_sixtuple_stage2.png';
 import platform_septuple from '../assets/img/map/plataforma_septuple_stage2.png';
 import platform_octuple from '../assets/img/map/plataforma_octuple_stage2.png';
 import platform_nonuple from '../assets/img/map/plataforma_nonuple_stage2.png';
@@ -138,10 +135,15 @@ function Stage2() {
   const [JavaScriptDialogue, setJavaScriptDialogue] = useState(false);
   const [PHPDialogue, setPHPDialogue] = useState(false);
   const [PythonDialogye,setPythonDialogue] = useState(false);
+  const [MySQLDialogue, setMySQLDialogue] = useState(false);
   const JSfullText = ` Tengo más de cinco años trabajando en el ecosistema JavaScript, cubriendo de punta a punta la creación de aplicaciones web y móviles.`;
   const JStypedText = useTypewriter(JavaScriptDialogue ? JSfullText : "", 50, 1200);
   const PHPfullText = ` Cuento con sólida experiencia en PHP, enfocada en el diseño y despliegue de Back‑Ends robustos con implementacion de systemas de seguridad y validacion de datos.`;
   const PHPtypedText = useTypewriter(PHPDialogue ? PHPfullText : "", 50, 1200);
+  const PythonfullText = ` Cuento con amplia experiencia en Python, utilizando PyCharm para desarrollar aplicaciones de escritorio y web, así como para la automatización de tareas.`;
+  const PythontypedText = useTypewriter(PythonDialogye ? PythonfullText : "", 50, 1200);
+  const MySQLfullText = ` Poseo experiencia integral en bases de datos relacionales, centrada en MySQL / MariaDB y extendida a PostgreSQL.`;
+  const MySQLtypedText = useTypewriter(MySQLDialogue ? MySQLfullText : "", 50, 1200);
 
   // Plataformas verdes fijas
   const platforms = [
@@ -158,7 +160,7 @@ function Stage2() {
     { x: 3700, y: window.innerHeight - groundHeight - 300, width: 40, height: 40, img: platform_una },
     { x: 3960, y: window.innerHeight - groundHeight - 100, width: 280, height: 40, img: platform_septuple },
     { x: 5100, y: window.innerHeight - groundHeight - 240, width: 320, height: 40, img: platform_octuple },
-    { x: 5900, y: window.innerHeight - groundHeight - 100, width: 120, height: 40, img: platform_triple },
+    { x: 5940, y: window.innerHeight - groundHeight - 80, width: 120, height: 40, img: platform_triple },
   ];
 
   const movingPlatforms = useRef([
@@ -193,31 +195,27 @@ function Stage2() {
 
   const buttons = useRef([
     { id: "btn1", x: 1050, y: window.innerHeight - groundHeight - 175, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
-    /*{ id: "btn2", x: 2200, y: window.innerHeight - groundHeight - 255, width: 60, height: 20, isPressed: false, jumpOffset: 0 },*/
     { id: "btn3", x: 3000, y: window.innerHeight - groundHeight - 15, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
-    /*{ id: "btn4", x: 3800, y: window.innerHeight - groundHeight - 215, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
-    { id: "btn5", x: 5050, y: window.innerHeight - groundHeight - 95, width: 60, height: 20, isPressed: false, jumpOffset: 0 },*/
+    { id: "btn4", x: 3800, y: window.innerHeight - groundHeight - 215, width: 60, height: 20, isPressed: false, jumpOffset: 0 },
+    { id: "btn5", x: 5600, y: window.innerHeight - groundHeight - 135, width: 60, height: 20, isPressed: false, jumpOffset: 0 }
   ]);
 
   const cranes = [
     { x: 1130, y: window.innerHeight - groundHeight - 350, width: 100, height: 350, img: CRANEBASE1, zIndex: 4 },
-    /*{ x: 1950, y: window.innerHeight - groundHeight - 430, width: 100, height: 350, img: CRANEBASE1, zIndex: 4 },*/
     { x: 2440, y: window.innerHeight - groundHeight - 540, width: 100, height: 540, img: CRANEBASE3, zIndex: 4 },
-    /*{ x: 4140, y: window.innerHeight - groundHeight - 350, width: 100, height: 350, img: CRANEBASE1, zIndex: 4 },
-    { x: 4700, y: window.innerHeight - groundHeight - 540, width: 100, height: 540, img: CRANEBASE3, zIndex: 4 },*/
+    { x: 4140, y: window.innerHeight - groundHeight - 350, width: 100, height: 350, img: CRANEBASE1, zIndex: 4 },
+    { x: 5960, y: window.innerHeight - groundHeight - 540, width: 100, height: 540, img: CRANEBASE3, zIndex: 4 }
   ]
 
   const triggeredObjects = useRef([
     { id: "btn1", x: 1160, y: window.innerHeight - groundHeight - 120, targetY: window.innerHeight - groundHeight - 300, width: 230, height: 80, speed: 3.5, direction: "up", isActive: false, img: CRANEARM1, text: "", icon: null, img_width: 0, fontSize: 12},
     { id: "btn1", x: 1220, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 240, width: 400, height: 195, speed: 4, direction: "up", isActive: false, img: SCREEN, text: "-> Construyo interfaces dinámicas con React JS y Node JS para plataformas web altamente interactivas.\n\n-> Manejo de JQuery para integracion de funciones API REST u otras funciones web de utilidad.\n\n-> Diseño de UI accesibles e interactivas 100% responsivas para desktop y mobil con diseño y navegacion horientada a la comodidad del usuario.", icon: REACTICON, img_width: "200px", fontSize: 8, marginTop: "20px" },
-    /*{ id: "btn2", x: 1755, y: window.innerHeight - groundHeight - 200, targetY: window.innerHeight - groundHeight - 390, width: 230, height: 120, speed: 3, direction: "up", isActive: false, img: CRANEARM2, text: "", icon: null, img_width: 0, fontSize: 12},
-    { id: "btn2", x: 1735, y: window.innerHeight - groundHeight - 80, targetY: window.innerHeight - groundHeight - 340, width: 200, height: 240, speed: 4, direction: "up", isActive: false, img: SCREEN2, text: "Manejo de JQuery para integracion de funciones API REST u otras funciones web de utilidad.", icon: JQUERY, img_width: "60px", fontSize: 10 },*/
     { id: "btn3", x: 2467, y: window.innerHeight - groundHeight - 80, targetY: window.innerHeight - groundHeight - 450, width: 400, height: 95, speed: 3, direction: "up", isActive: false, img: CRANEARM3, text: "", icon: null, img_width: 0, fontSize: 12},
     { id: "btn3", x: 2550, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 350, width: 360, height: 295, speed: 2.7, direction: "up", isActive: false, img: SCREEN3, text: "-> Desarrollo APIs y servicios escalables, aplicando el ecosistema Laravel para autenticación y migraciones o Lumen cuando se requiere máxima ligereza y velocidad.\n\n-> Configuro servidores backend en máquinas virtuales, orquestando Nginx como reverse proxy y servidor web para garantizar rendimiento, seguridad y balanceo eficiente.", icon: LARAVEL, img_width: "150px", fontSize: 10 },
-    /*{ id: "btn4", x: 4169, y: window.innerHeight - groundHeight - 120, targetY: window.innerHeight - groundHeight - 315, width: 240, height: 85, speed: 3, direction: "up", isActive: false, img: CRANEARM4, text: "", icon: null, img_width: 0, fontSize: 12},
-    { id: "btn4", x: 4200, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 235, width: 230, height: 200, speed: 4, direction: "up", isActive: false, img: SCREEN, text: "Desarrollo APIs y servicios escalables, aplicando el ecosistema Laravel para autenticación y migraciones o Lumen cuando se requiere máxima ligereza y velocidad.", icon: LARAVEL, img_width: "100px", fontSize: 8 },
-    { id: "btn5", x: 4517, y: window.innerHeight - groundHeight - 115, targetY: window.innerHeight - groundHeight - 415, width: 215, height: 120, speed: 4, direction: "up", isActive: false, img: CRANEARM2, text: "", icon: null, img_width: 0, fontSize: 12},
-    { id: "btn5", x: 4480, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 350, width: 215, height: 300, speed: 3.9, direction: "up", isActive: false, img: SCREEN4, text: "Configuro servidores backend en máquinas virtuales, orquestando Nginx como reverse proxy y servidor web para garantizar rendimiento, seguridad y balanceo eficiente.", icon: NGINX, img_width: "60px", fontSize: 10},*/
+    { id: "btn4", x: 4169, y: window.innerHeight - groundHeight - 120, targetY: window.innerHeight - groundHeight - 315, width: 240, height: 85, speed: 3, direction: "up", isActive: false, img: CRANEARM1, text: "", icon: null, img_width: 0, fontSize: 12},
+    { id: "btn4", x: 4220, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 245, width: 400, height: 195, speed: 4, direction: "up", isActive: false, img: SCREEN, text: "->Creo interfaces locales que almacenan y gestionan datos de forma fiable.\n\n->Manejo Pandas y Matplotlib para transformar y exponer información con claridad usando Dataframes de data.\n\n->Construyo APIs y servicios robustos con Django (stack completo) y FastAPI (alto rendimiento).", icon: DJANGO, img_width: "150px", fontSize: 8 },
+    { id: "btn5", x: 5777, y: window.innerHeight - groundHeight - 115, targetY: window.innerHeight - groundHeight - 415, width: 215, height: 120, speed: 4, direction: "up", isActive: false, img: CRANEARM2, text: "", icon: null, img_width: 0, fontSize: 12},
+    { id: "btn5", x: 5740, y: window.innerHeight - groundHeight, targetY: window.innerHeight - groundHeight - 350, width: 215, height: 300, speed: 3.9, direction: "up", isActive: false, img: SCREEN4, text: "->Levanto y administro servidores mediante XAMPP y WAMP, definiendo usuarios, respaldos, replicación y ajustes de rendimiento para entornos de desarrollo y pruebas.\n\n->Configuro instancias en servidores web o máquinas virtuales, asegurando conexión segura (SSL, roles) y abasteciendo back‑ends REST/GraphQL con datos consistentes y de alta disponibilidad.", icon: POSTGRESQL, img_width: "100px", fontSize: 8}
   ]);
 
    // Enemigos amarillos, con estado para color y desaparición
@@ -311,9 +309,9 @@ function Stage2() {
       imgON: PHP,
       imgOFF: PHP_OFF
     },
-    /*{
-      x: 5200,
-      y: window.innerHeight - groundHeight - 400,
+    {
+      x: 3350,
+      y: window.innerHeight - groundHeight - 200,
       width: 40,
       height: 40,
       isHit: false,
@@ -323,7 +321,20 @@ function Stage2() {
       },
       imgON: PYTHON,
       imgOFF: PYTHON_OFF
-    },*/
+    },
+    {
+      x: 5200,
+      y: window.innerHeight - groundHeight - 150,
+      width: 40,
+      height: 40,
+      isHit: false,
+      jumpOffset: 0,
+      onHit: () => {
+        setMySQLDialogue(true)
+      },
+      imgON: MYSQL,
+      imgOFF: MYSQL_OFF
+    },
   ]);
 
   const [coins, setCoins] = useState([
@@ -1225,6 +1236,108 @@ function Stage2() {
                 alt="PHP"
                 style={{
                   width: "100px",
+                  position: "absolute",
+                  bottom: "10px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+              />
+            </motion.div>
+          }
+
+          {/**DIALOGO PYTHON */}
+          { PythonDialogye && 
+            <motion.div
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 350, opacity: 1 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              style={{
+                position: "absolute",
+                top: window.innerHeight - groundHeight - (JavaScriptDialogue ? PHPDialogue ? 1000 : 740 : 455),
+                left: 3200,
+                height: "220px",
+                backgroundColor: "#38002C",
+                border: "4px solid #F4C975",
+                borderRadius: "5px",
+                zIndex: 3,
+                transform: `translateX(${cameraOffsetX.current}px)`,
+                padding: "10px",
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                textAlign: "center",
+                position: "relative", // clave para posicionar la imagen internamente
+              }}
+            >
+              <Typography
+                style={{
+                  fontFamily: '"Press Start 2P", monospace',
+                  fontSize: 12,
+                  color: "white",
+                  whiteSpace: "pre-line",
+                  lineHeight: "1.6",
+                }}
+              >
+                {PythontypedText}
+              </Typography>
+              <img
+                src={PYTHONICON}
+                alt="PHP"
+                style={{
+                  width: "80px",
+                  position: "absolute",
+                  bottom: "10px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                }}
+              />
+            </motion.div>
+          }
+
+          {/**DIALOGO MYSQL */}
+          { MySQLDialogue && 
+            <motion.div
+              initial={{ width: 0, opacity: 0 }}
+              animate={{ width: 350, opacity: 1 }}
+              transition={{ duration: 1.2, ease: "easeOut" }}
+              style={{
+                position: "absolute",
+                top: window.innerHeight - groundHeight - (JavaScriptDialogue ? PHPDialogue ? PythonDialogye ? 1230: 1000 : 950 : PHPDialogue ? 740 : PythonDialogye ? 675 : 455),
+                left: 4750,
+                height: "220px",
+                backgroundColor: "#38002C",
+                border: "4px solid #F4C975",
+                borderRadius: "5px",
+                zIndex: 3,
+                transform: `translateX(${cameraOffsetX.current}px)`,
+                padding: "10px",
+                overflow: "hidden",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                textAlign: "center",
+                position: "relative", // clave para posicionar la imagen internamente
+              }}
+            >
+              <Typography
+                style={{
+                  fontFamily: '"Press Start 2P", monospace',
+                  fontSize: 12,
+                  color: "white",
+                  whiteSpace: "pre-line",
+                  lineHeight: "1.6",
+                }}
+              >
+                {MySQLtypedText}
+              </Typography>
+              <img
+                src={MYSQLICON}
+                alt="PHP"
+                style={{
+                  width: "80px",
                   position: "absolute",
                   bottom: "10px",
                   left: "50%",
