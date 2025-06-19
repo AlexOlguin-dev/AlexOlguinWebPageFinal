@@ -2,6 +2,7 @@ import React from "react";
 import Play from "./Views/Play";
 import Stage1 from "./Views/Stage1";
 import Stage2 from "./Views/Stage2";
+import Stage3 from "./Views/Stage3";
 import { AppBar, Toolbar, Box } from "@mui/material";
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import ICON from '../src/assets/img/Icon.png';
@@ -39,6 +40,7 @@ function App() {
             <Route path="/" element={<Play />} />
             <Route path="/stage1" element={<Stage1 />} />
             <Route path="/stage2" element={<Stage2 />} />
+            <Route path="/stage3" element={<Stage3 />} />
           </Routes>
         </BrowserRouter>
       </Box>

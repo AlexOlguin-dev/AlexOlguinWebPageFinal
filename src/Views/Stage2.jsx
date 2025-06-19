@@ -27,12 +27,12 @@ import CRANEARM3 from '../assets/img/map/decorations/Crane/Crane3.png';
 import BARRIL1 from '../assets/img/map/decorations/barril24.png';
 import BARRIL2 from '../assets/img/map/decorations/barrill25.png';
 import TOWER1 from '../assets/img/map/decorations/tower1.png';
-import TOWER2 from '../assets/img/map/decorations/tower2.png';
 import TOWER3 from '../assets/img/map/decorations/tower3.png';
 import TOWER4 from '../assets/img/map/decorations/tower4.png';
 import MOTOR from '../assets/img/map/decorations/motor26.png';
 import GENERATOR from '../assets/img/map/decorations/generador27.png';
 import TUBO from '../assets/img/map/decorations/tubo4.png';
+import BUILDING from '../assets/img/map/final_building.png';
 //LENGUAJES
 import JAVASCRIPTICON from '../assets/img/map/decorations/Lenguajes/javascript.png';
 import REACTICON from '../assets/img/map/decorations/Lenguajes/react.png';
@@ -145,6 +145,8 @@ function Stage2() {
   const [PHPDialogue, setPHPDialogue] = useState(false);
   const [PythonDialogye,setPythonDialogue] = useState(false);
   const [MySQLDialogue, setMySQLDialogue] = useState(false);
+  const [isEnteringBuilding, setIsEnteringBuilding] = useState(false);
+  const [circleScale, setCircleScale] = useState(0);
   const JSfullText = ` Tengo más de cinco años trabajando en el ecosistema JavaScript, cubriendo de punta a punta la creación de aplicaciones web y móviles.`;
   const JStypedText = useTypewriter(JavaScriptDialogue ? JSfullText : "", 50, 1200);
   const PHPfullText = ` Cuento con sólida experiencia en PHP, enfocada en el diseño y despliegue de Back‑Ends robustos con implementacion de systemas de seguridad y validacion de datos.`;
@@ -907,12 +909,53 @@ function Stage2() {
         })
       );
 
+      const playerCenterX = posX.current + playerWidth / 2;
+      const playerCenterY = posY.current + playerHeight / 2;
+
+      const buildingLeft = 6500;
+      const buildingRight = 6500 + 200; // Ancho estimado de la imagen BUILDING
+      const buildingTop = window.innerHeight - groundHeight - 310;
+      const buildingBottom = buildingTop + 310;
+
+      const touchingBuilding =
+        playerCenterX > buildingLeft &&
+        playerCenterX < buildingRight &&
+        playerCenterY > buildingTop &&
+        playerCenterY < buildingBottom;
+
+      if (touchingBuilding && !isEnteringBuilding) {
+        setIsEnteringBuilding(true);
+        setPlayerCanMove(false);
+      }
+
       setTick((t) => t + 1);
     };
 
     const id = setInterval(update, 16);
     return () => clearInterval(id);
   }, [playerCanMove]);
+
+  useEffect(() => {
+    if (isEnteringBuilding) {
+      let start = null;
+
+      const animate = (timestamp) => {
+        if (!start) start = timestamp;
+        const elapsed = timestamp - start;
+        const progress = Math.min(elapsed / 1200, 1); // duración 1.2s
+
+        setCircleScale(progress);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          window.location.href = "/stage3"; // Cambia por la ruta que desees
+        }
+      };
+
+      requestAnimationFrame(animate);
+    }
+  }, [isEnteringBuilding]);
 
   return (
     <Box sx={{ height: "100vh", backgroundColor: "#38002C", display: "flex", justifyContent: "center", alignItems: "center", position: "relative", overflow: 'hidden', marginTop: "-60px" }}>
@@ -1706,6 +1749,35 @@ function Stage2() {
               transform: `translateX(${cameraOffsetX.current}px)`,
             }}
           />
+          <img 
+            src={BUILDING} 
+            alt="fuente" 
+            style={{ 
+              position: "absolute", 
+              top: window.innerHeight - groundHeight - 310, 
+              left: 6500, 
+              zIndex: 4,
+              transform: `translateX(${cameraOffsetX.current}px)`,
+            }}
+          />
+
+          {isEnteringBuilding && (
+            <div
+              style={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                width: "150vmax",
+                height: "150vmax",
+                backgroundColor: "black",
+                borderRadius: "50%",
+                transform: `translate(-50%, -50%) scale(${circleScale})`,
+                transition: "transform 0.1s linear",
+                zIndex: 9999,
+                pointerEvents: "none",
+              }}
+            />
+          )}
 
           {/* CONTROLES TÁCTILES */}
           { isMobile && 
