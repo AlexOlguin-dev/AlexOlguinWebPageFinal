@@ -41,29 +41,49 @@ const StarLayer = ({ stars, factor, scrollY, opacityFactor, zIndex, baseOpacity 
   </Box>
 );
 
+function interpolateColor(color1, color2, factor) {
+  const c1 = parseInt(color1.slice(1), 16);
+  const c2 = parseInt(color2.slice(1), 16);
+
+  const r1 = (c1 >> 16) & 0xff;
+  const g1 = (c1 >> 8) & 0xff;
+  const b1 = c1 & 0xff;
+
+  const r2 = (c2 >> 16) & 0xff;
+  const g2 = (c2 >> 8) & 0xff;
+  const b2 = c2 & 0xff;
+
+  const r = Math.round(r1 + (r2 - r1) * factor);
+  const g = Math.round(g1 + (g2 - g1) * factor);
+  const b = Math.round(b1 + (b2 - b1) * factor);
+
+  return `rgb(${r},${g},${b})`;
+}
+
 const Stage3 = () => {
-  const PANEL_HEIGHT = 5000;
+  const PANEL_HEIGHT = 7000;
   const TOTAL_STARS = 400;
   const FADE_IN_DURATION = 3000;
   const FADE_START_DELAY = 100;
-  const STARS_FADE_DISTANCE = 1000;
+
   const TEXT_START = 400;
   const TEXT_END = 3000;
+
+  const STARS_FADE_DISTANCE = 3000;
+  const BG_COLOR_CHANGE_START = 3000;
+  const BG_COLOR_CHANGE_END = 6000;
 
   const [scrollY, setScrollY] = useState(0);
   const [imageOpacity, setImageOpacity] = useState(0);
   const isFadingIn = useRef(true);
-
-  // NUEVO: Estado para saber si estamos en pantalla pequeña
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Función para actualizar isMobile según ancho actual
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 600); // ajusta 600px como punto móvil deseado
+      setIsMobile(window.innerWidth <= 600);
     };
 
-    handleResize(); // detecta al montar
+    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -82,6 +102,15 @@ const Stage3 = () => {
       : crawlProgress > 0.9
       ? 1 - (crawlProgress - 0.9) * 10
       : 1;
+
+  let bgColor = "black";
+  if (scrollY >= BG_COLOR_CHANGE_START) {
+    const factor = Math.min(
+      (scrollY - BG_COLOR_CHANGE_START) / (BG_COLOR_CHANGE_END - BG_COLOR_CHANGE_START),
+      1
+    );
+    bgColor = interpolateColor("#000000", "#671416", factor);
+  }
 
   useEffect(() => {
     const prevOverflowX = document.body.style.overflowX;
@@ -115,100 +144,118 @@ const Stage3 = () => {
   }, []);
 
   return (
-    <Box
-      sx={{
-        width: "100vw",
-        height: `${PANEL_HEIGHT}px`,
-        marginTop: "-60px",
-        backgroundColor: "black",
-        position: "relative",
-        overflow: "hidden",
-        perspective: "800px",
-      }}
-    >
-      {/* Estrellas */}
-      <StarLayer
-        stars={starsBg}
-        factor={parallax.bg}
-        scrollY={scrollY}
-        opacityFactor={starsOpacity}
-        zIndex={1}
-        baseOpacity={0.6}
-      />
-      <StarLayer
-        stars={starsMid}
-        factor={parallax.mid}
-        scrollY={scrollY}
-        opacityFactor={starsOpacity}
-        zIndex={2}
-        baseOpacity={0.85}
-      />
-      <StarLayer
-        stars={starsFront}
-        factor={parallax.front}
-        scrollY={scrollY}
-        opacityFactor={starsOpacity}
-        zIndex={3}
-        baseOpacity={1}
-      />
-
-      {/* Texto tipo Star Wars */}
+    <>
       <Box
         sx={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          width: "70vw",
-          transform: `translate(-50%, -50%) rotateX(30deg) translateY(-${crawlProgress * 1200}px) translateZ(${(1 - crawlProgress) * 600}px) scale(${1.5 - crawlProgress * 1.4})`,
-          color: "yellow",
-          textAlign: "justify",
-          fontSize: isMobile ? "1rem" : "2rem", // tamaño adaptado para móvil
-          lineHeight: 1.8,
-          zIndex: 4,
-          opacity: textOpacity,
-          transition: "opacity 0.2s",
-          transformStyle: "preserve-3d",
+          width: "100vw",
+          height: `${PANEL_HEIGHT}px`,
+          marginTop: "-60px",
+          backgroundColor: bgColor,
+          position: "relative",
+          overflow: "hidden",
+          perspective: "800px",
+          transition: "background-color 1s ease-out",
         }}
       >
-        <h1
-          style={{
-            textAlign: "center",
-            fontFamily: '"Press Start 2P", monospace',
-            fontSize: isMobile ? "1.5rem" : "3rem", // tamaño del título adaptado
+        {/* Estrellas */}
+        <StarLayer
+          stars={starsBg}
+          factor={parallax.bg}
+          scrollY={scrollY}
+          opacityFactor={starsOpacity}
+          zIndex={1}
+          baseOpacity={0.6}
+        />
+        <StarLayer
+          stars={starsMid}
+          factor={parallax.mid}
+          scrollY={scrollY}
+          opacityFactor={starsOpacity}
+          zIndex={2}
+          baseOpacity={0.85}
+        />
+        <StarLayer
+          stars={starsFront}
+          factor={parallax.front}
+          scrollY={scrollY}
+          opacityFactor={starsOpacity}
+          zIndex={3}
+          baseOpacity={1}
+        />
+
+        {/* Texto tipo Star Wars */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            width: "70vw",
+            transform: `translate(-50%, -50%) rotateX(30deg) translateY(-${crawlProgress * 1200}px) translateZ(${200 - crawlProgress * 600}px) scale(${2.8 - crawlProgress * 1.4})`,
+            color: "yellow",
+            textAlign: "justify",
+            fontSize: isMobile ? "1rem" : "2rem",
+            lineHeight: 1.8,
+            zIndex: 4,
+            opacity: textOpacity,
+            transition: "opacity 0.2s",
+            transformStyle: "preserve-3d",
           }}
         >
-          My experiencia laboral
-        </h1>
-        <p>
-          Esta sección está dedicada a mi experiencia laboral, donde he trabajado en proyectos que abarcan desde el desarrollo de
-          aplicaciones web hasta la implementación de sistemas de seguridad y bases de datos.
-        </p>
-        <p>
-          Surcaremos distintos aspectos de mi carrera, incluyendo mis habilidades en JavaScript, PHP, Python y MySQL, ademas
-          de las experiencias que he adquirido a lo largo de los años trabajado para distintos clientes y empresas.
-        </p>
-        <p>
-          Abrochence los cinturones y prepárense para un viaje a través de mi trayectoria profesional, donde exploraremos los desafíos que he enfrentado,
-          las soluciones que he implementado y las lecciones que he aprendido en el camino.
-        </p>
+          <h1
+            style={{
+              textAlign: "center",
+              fontFamily: '"Press Start 2P", monospace',
+              fontSize: isMobile ? "1.5rem" : "3rem",
+            }}
+          >
+            My experiencia laboral
+          </h1>
+          <p>
+            Esta sección está dedicada a mi experiencia laboral, donde he trabajado en proyectos que abarcan desde el desarrollo de
+            aplicaciones web hasta la implementación de sistemas de seguridad y bases de datos.
+          </p>
+          <p>
+            Surcaremos distintos aspectos de mi carrera, incluyendo mis habilidades en JavaScript, PHP, Python y MySQL, además
+            de las experiencias que he adquirido a lo largo de los años trabajando para distintos clientes y empresas.
+          </p>
+          <p>
+            Abróchense los cinturones y prepárense para un viaje a través de mi trayectoria profesional, donde exploraremos los desafíos que he enfrentado,
+            las soluciones que he implementado y las lecciones que he aprendido en el camino.
+          </p>
+        </Box>
+
+        {/* Logo scroll */}
+        <img
+          src={SCROLLDOWN}
+          alt="Scroll Down"
+          style={{
+            position: "absolute",
+            top: "80vh",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "150px",
+            opacity: imageOpacity,
+            transition: isFadingIn.current ? `opacity ${FADE_IN_DURATION}ms ease-in-out` : "none",
+            zIndex: 5,
+          }}
+        />
       </Box>
 
-      {/* Logo scroll */}
-      <img
-        src={SCROLLDOWN}
-        alt="Scroll Down"
-        style={{
-          position: "absolute",
-          top: "80vh",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: "150px",
-          opacity: imageOpacity,
-          transition: isFadingIn.current ? `opacity ${FADE_IN_DURATION}ms ease-in-out` : "none",
-          zIndex: 5,
+      {/* Horizonte oscuro que aparece desde abajo */}
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          width: "100vw",
+          height: "30vh",
+          backgroundColor: "#280507",
+          transform: scrollY >= BG_COLOR_CHANGE_END ? "translateY(0%)" : "translateY(100%)",
+          transition: "transform 1s ease-out",
+          zIndex: 6,
         }}
       />
-    </Box>
+    </>
   );
 };
 
