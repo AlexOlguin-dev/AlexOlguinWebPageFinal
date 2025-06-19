@@ -145,6 +145,7 @@ const Stage3 = () => {
 
   return (
     <>
+      {/* Panel principal con estrellas y texto */}
       <Box
         sx={{
           width: "100vw",
@@ -241,7 +242,7 @@ const Stage3 = () => {
         />
       </Box>
 
-      {/* Horizonte oscuro que aparece desde abajo */}
+      {/* Horizonte oscuro */}
       <Box
         sx={{
           position: "fixed",
@@ -250,9 +251,36 @@ const Stage3 = () => {
           width: "100vw",
           height: "30vh",
           backgroundColor: "#280507",
-          transform: scrollY >= BG_COLOR_CHANGE_END ? "translateY(0%)" : "translateY(100%)",
+          transform: scrollY >= 6000 ? "translateY(0%)" : "translateY(100%)",
           transition: "transform 1s ease-out",
           zIndex: 6,
+        }}
+      />
+
+      {/* Sol dorado */}
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: "15vh",
+          left: "50%",
+          transform: scrollY >= 6500 ? "translate(-50%, 0)" : "translate(-50%, 100vh)",
+          transition: "transform 2s ease-out",
+          width: "400px",
+          height: "400px",
+          backgroundColor: "#D6982B",
+          borderRadius: "50%",
+          zIndex: 5, // detrás del suelo
+        }}
+      />
+
+      {/* Extensión scroll para seguir bajando */}
+      <Box
+        sx={{
+          width: "100vw",
+          height: "4000px",
+          backgroundColor: "#671416",
+          position: "relative",
+          zIndex: 0,
         }}
       />
     </>
