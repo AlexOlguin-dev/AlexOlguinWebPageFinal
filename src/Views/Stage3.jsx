@@ -1,175 +1,199 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useMemo, useRef } from "react";
 import { Box } from "@mui/material";
-import SCROLLDOWN from '../assets/img/stage3_objects/scroll_down_logo.png';
+import SCROLLDOWN from "../assets/img/stage3_objects/scroll_down_logo.png";
 
-const generateStars = (count, maxHeightPx) => {
-  return Array.from({ length: count }).map(() => ({
+const generateStars = (count, maxHeight) =>
+  Array.from({ length: count }, () => ({
     x: Math.random() * 100,
-    y: Math.random() * maxHeightPx,
+    y: Math.random() * maxHeight,
     size: 1 + Math.random() * 2,
     id: Math.random().toString(36).substr(2, 9),
   }));
-};
+
+const StarLayer = ({ stars, factor, scrollY, opacityFactor, zIndex, baseOpacity }) => (
+  <Box
+    sx={{
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      transform: `translateY(-${scrollY * factor}px)`,
+      zIndex,
+      pointerEvents: "none",
+    }}
+  >
+    {stars.map((star) => (
+      <Box
+        key={star.id}
+        sx={{
+          position: "absolute",
+          left: `${star.x}vw`,
+          top: `${star.y}px`,
+          width: `${star.size}px`,
+          height: `${star.size}px`,
+          backgroundColor: "white",
+          borderRadius: "50%",
+          opacity: baseOpacity * opacityFactor,
+        }}
+      />
+    ))}
+  </Box>
+);
 
 const Stage3 = () => {
-  const [opacity, setOpacity] = useState(0);
-  const isFadingIn = useRef(true);
-  const [scrollY, setScrollY] = useState(0);
-
-  const PANEL_HEIGHT = 4000; // px
+  const PANEL_HEIGHT = 5000;
   const TOTAL_STARS = 400;
+  const FADE_IN_DURATION = 3000;
+  const FADE_START_DELAY = 100;
+  const STARS_FADE_DISTANCE = 1000;
+  const TEXT_START = 400;
+  const TEXT_END = 3000;
 
-  const starsBg = useRef(generateStars(Math.floor(TOTAL_STARS * 0.6), PANEL_HEIGHT));
-  const starsMid = useRef(generateStars(Math.floor(TOTAL_STARS * 0.25), PANEL_HEIGHT));
-  const starsFront = useRef(generateStars(Math.floor(TOTAL_STARS * 0.15), PANEL_HEIGHT));
+  const [scrollY, setScrollY] = useState(0);
+  const [imageOpacity, setImageOpacity] = useState(0);
+  const isFadingIn = useRef(true);
+
+  // NUEVO: Estado para saber si estamos en pantalla pequeña
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const originalOverflowX = document.body.style.overflowX;
-    const originalOverflowY = document.body.style.overflowY;
+    // Función para actualizar isMobile según ancho actual
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 600); // ajusta 600px como punto móvil deseado
+    };
 
+    handleResize(); // detecta al montar
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const starsBg = useMemo(() => generateStars(TOTAL_STARS * 0.6, PANEL_HEIGHT), []);
+  const starsMid = useMemo(() => generateStars(TOTAL_STARS * 0.25, PANEL_HEIGHT), []);
+  const starsFront = useMemo(() => generateStars(TOTAL_STARS * 0.15, PANEL_HEIGHT), []);
+
+  const parallax = { bg: 0.2, mid: 0.5, front: 0.8 };
+  const starsOpacity = Math.min(scrollY / STARS_FADE_DISTANCE, 1);
+
+  const crawlProgress = Math.max(0, Math.min((scrollY - TEXT_START) / (TEXT_END - TEXT_START), 1));
+  const textOpacity =
+    crawlProgress < 0.1
+      ? crawlProgress * 10
+      : crawlProgress > 0.9
+      ? 1 - (crawlProgress - 0.9) * 10
+      : 1;
+
+  useEffect(() => {
+    const prevOverflowX = document.body.style.overflowX;
+    const prevOverflowY = document.body.style.overflowY;
     document.body.style.overflowX = "hidden";
     document.body.style.overflowY = "auto";
 
-    const fadeInTimeout = setTimeout(() => {
-      setOpacity(1);
+    const fadeTimeout = setTimeout(() => {
+      setImageOpacity(1);
       setTimeout(() => {
         isFadingIn.current = false;
-      }, 3000);
-    }, 100);
+      }, FADE_IN_DURATION);
+    }, FADE_START_DELAY);
 
-    const handleScroll = () => {
-      const currentScroll = window.scrollY || window.pageYOffset;
-      setScrollY(currentScroll);
-
-      if (isFadingIn.current) return;
-
-      const fadeDistance = 300;
-      let newOpacity = 1 - currentScroll / fadeDistance;
-      setOpacity(Math.max(0, Math.min(newOpacity, 1)));
+    const onScroll = () => {
+      const y = window.scrollY || window.pageYOffset;
+      setScrollY(y);
+      if (!isFadingIn.current) {
+        const fadeOut = 1 - y / 300;
+        setImageOpacity(Math.max(0, Math.min(fadeOut, 1)));
+      }
     };
 
-    window.addEventListener("scroll", handleScroll);
-
+    window.addEventListener("scroll", onScroll);
     return () => {
-      document.body.style.overflowX = originalOverflowX;
-      document.body.style.overflowY = originalOverflowY;
-      clearTimeout(fadeInTimeout);
-      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", onScroll);
+      document.body.style.overflowX = prevOverflowX;
+      document.body.style.overflowY = prevOverflowY;
+      clearTimeout(fadeTimeout);
     };
   }, []);
 
-  const parallaxFactors = {
-    bg: 0.2,
-    mid: 0.5,
-    front: 0.8,
-  };
-
-  // 🎯 Calculamos opacidad general de estrellas según el scroll
-  const fadeInDistance = 1000; // Cuánto scroll necesita para estar al 100%
-  const starsOpacityFactor = Math.min(scrollY / fadeInDistance, 1);
-
   return (
     <Box
-      style={{
+      sx={{
         width: "100vw",
         height: `${PANEL_HEIGHT}px`,
         marginTop: "-60px",
         backgroundColor: "black",
         position: "relative",
         overflow: "hidden",
+        perspective: "800px",
       }}
     >
-      {/* Capa fondo */}
+      {/* Estrellas */}
+      <StarLayer
+        stars={starsBg}
+        factor={parallax.bg}
+        scrollY={scrollY}
+        opacityFactor={starsOpacity}
+        zIndex={1}
+        baseOpacity={0.6}
+      />
+      <StarLayer
+        stars={starsMid}
+        factor={parallax.mid}
+        scrollY={scrollY}
+        opacityFactor={starsOpacity}
+        zIndex={2}
+        baseOpacity={0.85}
+      />
+      <StarLayer
+        stars={starsFront}
+        factor={parallax.front}
+        scrollY={scrollY}
+        opacityFactor={starsOpacity}
+        zIndex={3}
+        baseOpacity={1}
+      />
+
+      {/* Texto tipo Star Wars */}
       <Box
-        style={{
+        sx={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: `${PANEL_HEIGHT}px`,
-          transform: `translateY(-${scrollY * parallaxFactors.bg}px)`,
-          zIndex: 1,
-          pointerEvents: "none",
+          top: "50%",
+          left: "50%",
+          width: "70vw",
+          transform: `translate(-50%, -50%) rotateX(30deg) translateY(-${crawlProgress * 1200}px) translateZ(${(1 - crawlProgress) * 600}px) scale(${1.5 - crawlProgress * 1.4})`,
+          color: "yellow",
+          textAlign: "justify",
+          fontSize: isMobile ? "1rem" : "2rem", // tamaño adaptado para móvil
+          lineHeight: 1.8,
+          zIndex: 4,
+          opacity: textOpacity,
+          transition: "opacity 0.2s",
+          transformStyle: "preserve-3d",
         }}
       >
-        {starsBg.current.map((star) => (
-          <Box
-            key={star.id}
-            sx={{
-              position: "absolute",
-              left: `${star.x}vw`,
-              top: `${star.y}px`,
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-              backgroundColor: "white",
-              borderRadius: "50%",
-              opacity: 0.6 * starsOpacityFactor,
-            }}
-          />
-        ))}
+        <h1
+          style={{
+            textAlign: "center",
+            fontFamily: '"Press Start 2P", monospace',
+            fontSize: isMobile ? "1.5rem" : "3rem", // tamaño del título adaptado
+          }}
+        >
+          My experiencia laboral
+        </h1>
+        <p>
+          Esta sección está dedicada a mi experiencia laboral, donde he trabajado en proyectos que abarcan desde el desarrollo de
+          aplicaciones web hasta la implementación de sistemas de seguridad y bases de datos.
+        </p>
+        <p>
+          Surcaremos distintos aspectos de mi carrera, incluyendo mis habilidades en JavaScript, PHP, Python y MySQL, ademas
+          de las experiencias que he adquirido a lo largo de los años trabajado para distintos clientes y empresas.
+        </p>
+        <p>
+          Abrochence los cinturones y prepárense para un viaje a través de mi trayectoria profesional, donde exploraremos los desafíos que he enfrentado,
+          las soluciones que he implementado y las lecciones que he aprendido en el camino.
+        </p>
       </Box>
 
-      {/* Capa media */}
-      <Box
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: `${PANEL_HEIGHT}px`,
-          transform: `translateY(-${scrollY * parallaxFactors.mid}px)`,
-          zIndex: 2,
-          pointerEvents: "none",
-        }}
-      >
-        {starsMid.current.map((star) => (
-          <Box
-            key={star.id}
-            sx={{
-              position: "absolute",
-              left: `${star.x}vw`,
-              top: `${star.y}px`,
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-              backgroundColor: "white",
-              borderRadius: "50%",
-              opacity: 0.85 * starsOpacityFactor,
-            }}
-          />
-        ))}
-      </Box>
-
-      {/* Capa frente */}
-      <Box
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: `${PANEL_HEIGHT}px`,
-          transform: `translateY(-${scrollY * parallaxFactors.front}px)`,
-          zIndex: 3,
-          pointerEvents: "none",
-        }}
-      >
-        {starsFront.current.map((star) => (
-          <Box
-            key={star.id}
-            sx={{
-              position: "absolute",
-              left: `${star.x}vw`,
-              top: `${star.y}px`,
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-              backgroundColor: "white",
-              borderRadius: "50%",
-              opacity: 1 * starsOpacityFactor,
-            }}
-          />
-        ))}
-      </Box>
-
-      {/* Imagen Scroll Down */}
+      {/* Logo scroll */}
       <img
         src={SCROLLDOWN}
         alt="Scroll Down"
@@ -179,9 +203,9 @@ const Stage3 = () => {
           left: "50%",
           transform: "translateX(-50%)",
           width: "150px",
-          opacity: opacity,
-          transition: isFadingIn.current ? "opacity 3s ease-in-out" : "none",
-          zIndex: 4,
+          opacity: imageOpacity,
+          transition: isFadingIn.current ? `opacity ${FADE_IN_DURATION}ms ease-in-out` : "none",
+          zIndex: 5,
         }}
       />
     </Box>
