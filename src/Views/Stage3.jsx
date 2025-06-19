@@ -257,21 +257,55 @@ const Stage3 = () => {
         }}
       />
 
-      {/* Sol dorado */}
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: "15vh",
-          left: "50%",
-          transform: scrollY >= 6500 ? "translate(-50%, 0)" : "translate(-50%, 100vh)",
-          transition: "transform 2s ease-out",
-          width: "400px",
-          height: "400px",
-          backgroundColor: "#D6982B",
-          borderRadius: "50%",
-          zIndex: 5, // detrás del suelo
-        }}
-      />
+      {/* Sol dorado con texto interno */}
+			<Box
+				sx={{
+					position: "fixed",
+					bottom: "15vh",
+					left: "50%",
+					transform: scrollY >= 6500 ? "translate(-50%, 0)" : "translate(-50%, 100vh)",
+					transition: "transform 2s ease-out",
+					width: "400px",
+					height: "400px",
+					backgroundColor: "#D6982B",
+					borderRadius: "50%",
+					zIndex: 5,
+					display: "flex",
+					alignItems: "center",
+					justifyContent: "center",
+					textAlign: "center",
+					flexDirection: "column",
+					overflow: "hidden",
+					padding: "20px",
+				}}
+			>
+				<Box
+					sx={{
+						fontFamily: '"Press Start 2P", monospace',
+						fontSize: "12px",
+						opacity: Math.min(Math.max((scrollY - 7500) / 800, 0), 1),
+						transition: "opacity 0.2s",
+						color: "#280507",
+					}}
+				>
+					Akkuarios
+				</Box>
+				<Box
+					sx={{
+						fontFamily: '"Press Start 2P", monospace',
+						fontSize: "10px",
+						opacity: Math.min(Math.max((scrollY - 7500) / 800, 0), 1),
+						transition: "opacity 0.2s",
+						color: "#280507",
+						marginTop: "10px",
+						maxWidth: "90%",
+					}}
+				>
+					Mi primer proyecto fue para la empresa independiente Akkuarios, donde desarrollé un sistema de minado de datos web.
+					El software permitía a los usuarios extraer información de diversas fuentes en línea, facilitando la recopilación de datos para análisis posteriores.
+					Todo desarrllado en Python, con un enfoque en la eficiencia y la facilidad de uso.
+				</Box>
+			</Box>
 
       {/* Extensión scroll para seguir bajando */}
       <Box
