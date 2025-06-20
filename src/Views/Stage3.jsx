@@ -4,42 +4,11 @@ import SCROLLDOWN from "../assets/img/stage3_objects/scroll_down_logo.png";
 
 const generateStars = (count, maxHeight) =>
   Array.from({ length: count }, () => ({
-    x: Math.random() * 100,
-    y: Math.random() * maxHeight,
+    x: Math.random() * 100,          // en vw
+    y: Math.random() * maxHeight,    // en px vertical
     size: 1 + Math.random() * 2,
     id: Math.random().toString(36).substr(2, 9),
   }));
-
-const StarLayer = ({ stars, factor, scrollY, opacityFactor, zIndex, baseOpacity }) => (
-  <Box
-    sx={{
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      transform: `translateY(-${scrollY * factor}px)`,
-      zIndex,
-      pointerEvents: "none",
-    }}
-  >
-    {stars.map((star) => (
-      <Box
-        key={star.id}
-        sx={{
-          position: "absolute",
-          left: `${star.x}vw`,
-          top: `${star.y}px`,
-          width: `${star.size}px`,
-          height: `${star.size}px`,
-          backgroundColor: "white",
-          borderRadius: "50%",
-          opacity: baseOpacity * opacityFactor,
-        }}
-      />
-    ))}
-  </Box>
-);
 
 function interpolateColor(color1, color2, factor) {
   const c1 = parseInt(color1.slice(1), 16);
@@ -60,6 +29,44 @@ function interpolateColor(color1, color2, factor) {
   return `rgb(${r},${g},${b})`;
 }
 
+// Componente para dibujar las estrellas con parallax y opacidad
+const StarLayer = ({ stars, factor, scrollY, baseOpacity, zIndex }) => {
+  const PANEL_HEIGHT = 7000;
+
+  // Desplaza toda la capa verticalmente para simular parallax
+  return (
+    <Box
+      sx={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: `${PANEL_HEIGHT}px`,    // TODO: altura total para que top star.y px funcione bien
+        transform: `translateY(-${scrollY * factor}px)`,
+        zIndex,
+        pointerEvents: "none",
+      }}
+    >
+      {stars.map((star) => (
+        <Box
+          key={star.id}
+          sx={{
+            position: "absolute",
+            left: `${star.x}vw`,
+            top: `${star.y}px`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            backgroundColor: "white",
+            borderRadius: "50%",
+            opacity: baseOpacity,
+            transition: "opacity 0.3s ease",
+          }}
+        />
+      ))}
+    </Box>
+  );
+};
+
 const Stage3 = () => {
   const PANEL_HEIGHT = 7000;
   const TOTAL_STARS = 400;
@@ -69,7 +76,12 @@ const Stage3 = () => {
   const TEXT_START = 400;
   const TEXT_END = 3000;
 
-  const STARS_FADE_DISTANCE = 3000;
+  const SCROLLDOWN_DISAPPEAR_Y = 300;
+  const STARS_FADE_IN_START = SCROLLDOWN_DISAPPEAR_Y; // 300px scrollY
+  const STARS_FADE_IN_END = 400;
+  const STARS_VISIBLE_START = 400;
+  const STARS_VISIBLE_END = 3500;
+  const STARS_FADE_OUT_END = 6000;
   const BG_COLOR_CHANGE_START = 3000;
   const BG_COLOR_CHANGE_END = 6000;
 
@@ -93,7 +105,20 @@ const Stage3 = () => {
   const starsFront = useMemo(() => generateStars(TOTAL_STARS * 0.15, PANEL_HEIGHT), []);
 
   const parallax = { bg: 0.2, mid: 0.5, front: 0.8 };
-  const starsOpacity = Math.min(scrollY / STARS_FADE_DISTANCE, 1);
+
+  // Calcula opacidad de estrellas según scroll para que aparezcan luego que SCROLLDOWN desaparece
+  let starsOpacity;
+  if (scrollY < STARS_FADE_IN_START) {
+    starsOpacity = 0;
+  } else if (scrollY >= STARS_FADE_IN_START && scrollY < STARS_FADE_IN_END) {
+    starsOpacity = (scrollY - STARS_FADE_IN_START) / (STARS_FADE_IN_END - STARS_FADE_IN_START);
+  } else if (scrollY >= STARS_VISIBLE_START && scrollY < STARS_VISIBLE_END) {
+    starsOpacity = 1;
+  } else if (scrollY >= STARS_VISIBLE_END && scrollY <= STARS_FADE_OUT_END) {
+    starsOpacity = 1 - (scrollY - STARS_VISIBLE_END) / (STARS_FADE_OUT_END - STARS_VISIBLE_END);
+  } else {
+    starsOpacity = 0;
+  }
 
   const crawlProgress = Math.max(0, Math.min((scrollY - TEXT_START) / (TEXT_END - TEXT_START), 1));
   const textOpacity =
@@ -158,31 +183,10 @@ const Stage3 = () => {
           transition: "background-color 1s ease-out",
         }}
       >
-        {/* Estrellas */}
-        <StarLayer
-          stars={starsBg}
-          factor={parallax.bg}
-          scrollY={scrollY}
-          opacityFactor={starsOpacity}
-          zIndex={1}
-          baseOpacity={0.6}
-        />
-        <StarLayer
-          stars={starsMid}
-          factor={parallax.mid}
-          scrollY={scrollY}
-          opacityFactor={starsOpacity}
-          zIndex={2}
-          baseOpacity={0.85}
-        />
-        <StarLayer
-          stars={starsFront}
-          factor={parallax.front}
-          scrollY={scrollY}
-          opacityFactor={starsOpacity}
-          zIndex={3}
-          baseOpacity={1}
-        />
+        {/* Estrellas con parallax */}
+        <StarLayer stars={starsBg} scrollY={scrollY} factor={parallax.bg} baseOpacity={0.6 * starsOpacity} zIndex={1} />
+        <StarLayer stars={starsMid} scrollY={scrollY} factor={parallax.mid} baseOpacity={0.85 * starsOpacity} zIndex={2} />
+        <StarLayer stars={starsFront} scrollY={scrollY} factor={parallax.front} baseOpacity={1 * starsOpacity} zIndex={3} />
 
         {/* Texto tipo Star Wars */}
         <Box
@@ -258,54 +262,54 @@ const Stage3 = () => {
       />
 
       {/* Sol dorado con texto interno */}
-			<Box
-				sx={{
-					position: "fixed",
-					bottom: "15vh",
-					left: "50%",
-					transform: scrollY >= 6500 ? "translate(-50%, 0)" : "translate(-50%, 100vh)",
-					transition: "transform 2s ease-out",
-					width: "400px",
-					height: "400px",
-					backgroundColor: "#D6982B",
-					borderRadius: "50%",
-					zIndex: 5,
-					display: "flex",
-					alignItems: "center",
-					justifyContent: "center",
-					textAlign: "center",
-					flexDirection: "column",
-					overflow: "hidden",
-					padding: "20px",
-				}}
-			>
-				<Box
-					sx={{
-						fontFamily: '"Press Start 2P", monospace',
-						fontSize: "12px",
-						opacity: Math.min(Math.max((scrollY - 7500) / 800, 0), 1),
-						transition: "opacity 0.2s",
-						color: "#280507",
-					}}
-				>
-					Akkuarios
-				</Box>
-				<Box
-					sx={{
-						fontFamily: '"Press Start 2P", monospace',
-						fontSize: "10px",
-						opacity: Math.min(Math.max((scrollY - 7500) / 800, 0), 1),
-						transition: "opacity 0.2s",
-						color: "#280507",
-						marginTop: "10px",
-						maxWidth: "90%",
-					}}
-				>
-					Mi primer proyecto fue para la empresa independiente Akkuarios, donde desarrollé un sistema de minado de datos web.
-					El software permitía a los usuarios extraer información de diversas fuentes en línea, facilitando la recopilación de datos para análisis posteriores.
-					Todo desarrllado en Python, con un enfoque en la eficiencia y la facilidad de uso.
-				</Box>
-			</Box>
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: "15vh",
+          left: "50%",
+          transform: scrollY >= 6500 ? "translate(-50%, 0)" : "translate(-50%, 100vh)",
+          transition: "transform 2s ease-out",
+          width: "400px",
+          height: "400px",
+          backgroundColor: "#D6982B",
+          borderRadius: "50%",
+          zIndex: 5,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          flexDirection: "column",
+          overflow: "hidden",
+          padding: "20px",
+        }}
+      >
+        <Box
+          sx={{
+            fontFamily: '"Press Start 2P", monospace',
+            fontSize: "12px",
+            opacity: Math.min(Math.max((scrollY - 7500) / 800, 0), 1),
+            transition: "opacity 0.2s",
+            color: "#280507",
+          }}
+        >
+          Akkuarios
+        </Box>
+        <Box
+          sx={{
+            fontFamily: '"Press Start 2P", monospace',
+            fontSize: "10px",
+            opacity: Math.min(Math.max((scrollY - 7500) / 800, 0), 1),
+            transition: "opacity 0.2s",
+            color: "#280507",
+            marginTop: "10px",
+            maxWidth: "90%",
+          }}
+        >
+          Mi primer proyecto fue para la empresa independiente Akkuarios, donde desarrollé un sistema de minado de datos web.
+          El software permitía a los usuarios extraer información de diversas fuentes en línea, facilitando la recopilación de datos para análisis posteriores.
+          Todo desarrllado en Python, con un enfoque en la eficiencia y la facilidad de uso.
+        </Box>
+      </Box>
 
       {/* Extensión scroll para seguir bajando */}
       <Box
