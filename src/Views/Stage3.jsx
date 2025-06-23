@@ -376,7 +376,7 @@ const Stage3 = () => {
       <Box
         sx={{
           position: "fixed",
-          bottom: 200,
+          bottom: 180,
           left: "100vw",
           width: "490px", // más ancho para scroll horizontal
           height: "500px",
@@ -427,7 +427,7 @@ const Stage3 = () => {
       <Box
         sx={{
           position: "fixed",
-          bottom: 200,
+          bottom: 150,
           left: "calc(100vw + 600px)",
           width: "470px", // más ancho para scroll horizontal
           height: "480px",
@@ -443,8 +443,68 @@ const Stage3 = () => {
 
       <Box
         sx={{
+          position: "fixed",
+          bottom: 0,
+          left: "calc(100vw)",
+          width: "470px", // más ancho para scroll horizontal
+          height: "100vh",
+          transform: `translateX(-${treeOffsetBack1}vw)`,
+          transition: "transform 0.2s linear",
+          zIndex: 9, // debajo del suelo
+          pointerEvents: "none",
+          backgroundColor: "#755a28"
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: "calc(100% - 90%)",
+            left: "calc(100vw - 97.2vw)",
+            width: "85%",
+            height: "55%",
+            borderRadius: "50%",
+            backgroundColor: "#ebc278",
+            zIndex: 10,
+          }}
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: "calc(100% - 20%)",
+              left: "calc(100vw - 92vw)",
+              fontFamily: '"Press Start 2P", monospace',
+              fontSize: "12px",
+              color: "black",
+              transition: "transform 0.2s ease-out",
+              zIndex: 11
+            }}
+          >
+            Universidad UTEM
+          </Box>
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: "calc(100% - 60%)",
+              left: "calc(100vw - 95.5vw)",
+              width: "70%",
+              fontFamily: '"Press Start 2P", monospace',
+              fontSize: "11px",
+              color: "black",
+              transition: "transform 0.2s ease-out",
+              zIndex: 11,
+              textAlign: "justify",
+            }}
+          >
+            Ayude con la construccion de la actualizacion del sistema de intranet de la universidad para gestion de alumnos y profesores, programado en Django con base de datos PostgreSQL.
+          </Box>
+        </Box>
+        
+      </Box>
+
+      <Box
+        sx={{
           width: "100vw",
-          height: "8000px",
+          height: "10000px",
           backgroundColor: bgColor,
           position: "relative",
           zIndex: 0,
