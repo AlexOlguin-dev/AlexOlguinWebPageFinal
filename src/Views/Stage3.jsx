@@ -2,6 +2,8 @@ import React, { useEffect, useState, useMemo, useRef } from "react";
 import { Box } from "@mui/material";
 import SCROLLDOWN from "../assets/img/stage3_objects/scroll_down_logo.png";
 import CACTUS from '../assets/img/stage3_objects/cactus.png';
+import TREES_BACK from "../assets/img/stage3_objects/tree.png";
+import TREES_FRONT from "../assets/img/stage3_objects/tree.png";
 
 const generateStars = (count, maxHeight) =>
   Array.from({ length: count }, () => ({
@@ -90,6 +92,9 @@ const Stage3 = () => {
   const HORIZONTAL_END = 12000;
   const SKY_COLOR_TRANSITION_END = 16000;
 
+  const TREES_START = 9000;
+  const TREES_END = 25000;
+
   const [scrollY, setScrollY] = useState(0);
   const [imageOpacity, setImageOpacity] = useState(0);
   const isFadingIn = useRef(true);
@@ -151,6 +156,14 @@ const Stage3 = () => {
   } else if (scrollY > SKY_COLOR_TRANSITION_END) {
     bgColor = "#25afc2";
   }
+
+  const treeScrollProgress = Math.min(
+    Math.max((scrollY - TREES_START) / (TREES_END - TREES_START), 0),
+    1
+  );
+
+  const treeOffsetBack = treeScrollProgress * 40; // más lento
+  const treeOffsetFront = treeScrollProgress * 80; // más rápido
 
   useEffect(() => {
     const prevOverflowX = document.body.style.overflowX;
@@ -308,7 +321,6 @@ const Stage3 = () => {
             opacity: Math.min(Math.max((scrollY - 8000) / 800, 0), 1),
             transition: "opacity 0.2s",
             color: "#280507",
-            transform: `translateX(-${horizontalProgress * 80}vw)`,
             transition: "transform 0.2s ease-out",
           }}
         >
@@ -323,7 +335,6 @@ const Stage3 = () => {
             color: "#280507",
             marginTop: "10px",
             maxWidth: "90%",
-            transform: `translateX(-${horizontalProgress * 80}vw)`,
             transition: "transform 0.2s ease-out",
           }}
         >
@@ -350,6 +361,52 @@ const Stage3 = () => {
       />
 
       {/* Extensión scroll para seguir bajando */}
+      <Box
+        sx={{
+          width: "100vw",
+          height: "8000px",
+          backgroundColor: bgColor,
+          position: "relative",
+          zIndex: 0,
+        }}
+      />
+
+      {/* Árboles - capa trasera */}
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 200,
+          left: "100vw",
+          width: "30vw", // más ancho para scroll horizontal
+          height: "78vh",
+          backgroundImage: `url(${TREES_BACK})`,
+          backgroundRepeat: "repeat-x",
+          backgroundSize: "cover",
+          transform: `translateX(-${treeOffsetBack}vw)`,
+          transition: "transform 0.2s linear",
+          zIndex: 4, // debajo del suelo
+          pointerEvents: "none",
+        }}
+      />
+
+      {/* Árboles - capa delantera
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: 0,
+          width: "200vw",
+          height: "30vh",
+          backgroundImage: `url(${TREES_FRONT})`,
+          backgroundRepeat: "repeat-x",
+          backgroundSize: "cover",
+          transform: `translateX(-${treeOffsetFront}vw)`,
+          transition: "transform 0.2s linear",
+          zIndex: 5, // justo debajo del cactus y el sol
+          pointerEvents: "none",
+        }}
+      /> */}
+
       <Box
         sx={{
           width: "100vw",
