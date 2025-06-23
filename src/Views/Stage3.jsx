@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import { Box } from "@mui/material";
 import SCROLLDOWN from "../assets/img/stage3_objects/scroll_down_logo.png";
+import CACTUS from '../assets/img/stage3_objects/cactus.png';
 
 const generateStars = (count, maxHeight) =>
   Array.from({ length: count }, () => ({
@@ -81,9 +82,13 @@ const Stage3 = () => {
   const STARS_FADE_IN_END = 400;
   const STARS_VISIBLE_START = 400;
   const STARS_VISIBLE_END = 3500;
-  const STARS_FADE_OUT_END = 6000;
+  const STARS_FADE_OUT_END = 5500;
   const BG_COLOR_CHANGE_START = 3000;
   const BG_COLOR_CHANGE_END = 6000;
+
+  const HORIZONTAL_START = 9500;
+  const HORIZONTAL_END = 12000;
+  const SKY_COLOR_TRANSITION_END = 16000;
 
   const [scrollY, setScrollY] = useState(0);
   const [imageOpacity, setImageOpacity] = useState(0);
@@ -105,6 +110,11 @@ const Stage3 = () => {
   const starsFront = useMemo(() => generateStars(TOTAL_STARS * 0.15, PANEL_HEIGHT), []);
 
   const parallax = { bg: 0.2, mid: 0.5, front: 0.8 };
+
+  const horizontalProgress = Math.min(
+    Math.max((scrollY - HORIZONTAL_START) / (HORIZONTAL_END - HORIZONTAL_START), 0),
+    1
+  );
 
   // Calcula opacidad de estrellas según scroll para que aparezcan luego que SCROLLDOWN desaparece
   let starsOpacity;
@@ -128,13 +138,18 @@ const Stage3 = () => {
       ? 1 - (crawlProgress - 0.9) * 10
       : 1;
 
-  let bgColor = "black";
-  if (scrollY >= BG_COLOR_CHANGE_START) {
-    const factor = Math.min(
-      (scrollY - BG_COLOR_CHANGE_START) / (BG_COLOR_CHANGE_END - BG_COLOR_CHANGE_START),
-      1
-    );
+  let bgColor = "#000000";
+
+  if (scrollY < BG_COLOR_CHANGE_START) {
+    bgColor = "#000000";
+  } else if (scrollY >= BG_COLOR_CHANGE_START && scrollY <= BG_COLOR_CHANGE_END) {
+    const factor = (scrollY - BG_COLOR_CHANGE_START) / (BG_COLOR_CHANGE_END - BG_COLOR_CHANGE_START);
     bgColor = interpolateColor("#000000", "#671416", factor);
+  } else if (scrollY > BG_COLOR_CHANGE_END && scrollY <= SKY_COLOR_TRANSITION_END) {
+    const factor = (scrollY - BG_COLOR_CHANGE_END) / (SKY_COLOR_TRANSITION_END - BG_COLOR_CHANGE_END);
+    bgColor = interpolateColor("#671416", "#25afc2", factor);
+  } else if (scrollY > SKY_COLOR_TRANSITION_END) {
+    bgColor = "#25afc2";
   }
 
   useEffect(() => {
@@ -213,7 +228,7 @@ const Stage3 = () => {
               fontSize: isMobile ? "1.5rem" : "3rem",
             }}
           >
-            My experiencia laboral
+            Mi experiencia laboral
           </h1>
           <p>
             Esta sección está dedicada a mi experiencia laboral, donde he trabajado en proyectos que abarcan desde el desarrollo de
@@ -267,7 +282,10 @@ const Stage3 = () => {
           position: "fixed",
           bottom: "15vh",
           left: "50%",
-          transform: scrollY >= 6500 ? "translate(-50%, 0)" : "translate(-50%, 100vh)",
+          transform: `
+            ${scrollY >= 6500 ? "translate(-50%, 0)" : "translate(-50%, 100vh)"}
+            translateX(-${horizontalProgress * 80}vw)
+          `,
           transition: "transform 2s ease-out",
           width: "400px",
           height: "400px",
@@ -287,9 +305,11 @@ const Stage3 = () => {
           sx={{
             fontFamily: '"Press Start 2P", monospace',
             fontSize: "12px",
-            opacity: Math.min(Math.max((scrollY - 7500) / 800, 0), 1),
+            opacity: Math.min(Math.max((scrollY - 8000) / 800, 0), 1),
             transition: "opacity 0.2s",
             color: "#280507",
+            transform: `translateX(-${horizontalProgress * 80}vw)`,
+            transition: "transform 0.2s ease-out",
           }}
         >
           Akkuarios
@@ -298,25 +318,43 @@ const Stage3 = () => {
           sx={{
             fontFamily: '"Press Start 2P", monospace',
             fontSize: "10px",
-            opacity: Math.min(Math.max((scrollY - 7500) / 800, 0), 1),
+            opacity: Math.min(Math.max((scrollY - 8500) / 800, 0), 1),
             transition: "opacity 0.2s",
             color: "#280507",
             marginTop: "10px",
             maxWidth: "90%",
+            transform: `translateX(-${horizontalProgress * 80}vw)`,
+            transition: "transform 0.2s ease-out",
           }}
         >
-          Mi primer proyecto fue para la empresa independiente Akkuarios, donde desarrollé un sistema de minado de datos web.
+          Mis primeros proyectos fueron para la empresa independiente Akkuarios, donde desarrollé varios sistema de minado de datos web (Scrapping).
           El software permitía a los usuarios extraer información de diversas fuentes en línea, facilitando la recopilación de datos para análisis posteriores.
-          Todo desarrllado en Python, con un enfoque en la eficiencia y la facilidad de uso.
+          Todo desarrollado en Python, con un enfoque en la eficiencia y la facilidad de uso.
         </Box>
       </Box>
+
+      <img
+        src={CACTUS}
+        alt="Cactus"
+        style={{
+          position: "fixed",
+          bottom: scrollY >= 7000 ? isMobile ? "-40vh": "-10vh" : "-500px", // aparece desde abajo
+          left: "calc(20% - 260px)", // posición según dispositivo
+          width: "500px",
+          height: "auto",
+          transition: "bottom 1s ease-out, opacity 1s ease-out",
+          zIndex: 7,
+          pointerEvents: "none",
+          transform: `translateX(-${horizontalProgress * 200}vw)`,
+        }}
+      />
 
       {/* Extensión scroll para seguir bajando */}
       <Box
         sx={{
           width: "100vw",
-          height: "4000px",
-          backgroundColor: "#671416",
+          height: "8000px",
+          backgroundColor: bgColor,
           position: "relative",
           zIndex: 0,
         }}
