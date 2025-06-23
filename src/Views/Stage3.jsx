@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import SCROLLDOWN from "../assets/img/stage3_objects/scroll_down_logo.png";
 import CACTUS from '../assets/img/stage3_objects/cactus.png';
 import TREES_BACK from "../assets/img/stage3_objects/tree.png";
-import TREES_FRONT from "../assets/img/stage3_objects/tree.png";
+import TREES_BACK2 from "../assets/img/stage3_objects/tree2.png";
 
 const generateStars = (count, maxHeight) =>
   Array.from({ length: count }, () => ({
@@ -162,8 +162,9 @@ const Stage3 = () => {
     1
   );
 
-  const treeOffsetBack = treeScrollProgress * 40; // más lento
-  const treeOffsetFront = treeScrollProgress * 80; // más rápido
+  const treeOffsetBack1 = treeScrollProgress * 80; // más lento
+  const treeOffsetBack2 = treeScrollProgress * 120; // más lento
+  const treeOffsetBack3 = treeScrollProgress * 160; // más lento
 
   useEffect(() => {
     const prevOverflowX = document.body.style.overflowX;
@@ -377,35 +378,68 @@ const Stage3 = () => {
           position: "fixed",
           bottom: 200,
           left: "100vw",
-          width: "30vw", // más ancho para scroll horizontal
-          height: "78vh",
+          width: "490px", // más ancho para scroll horizontal
+          height: "500px",
           backgroundImage: `url(${TREES_BACK})`,
           backgroundRepeat: "repeat-x",
           backgroundSize: "cover",
-          transform: `translateX(-${treeOffsetBack}vw)`,
+          transform: `translateX(-${treeOffsetBack2}vw)`,
           transition: "transform 0.2s linear",
-          zIndex: 4, // debajo del suelo
+          zIndex: 9, // debajo del suelo
           pointerEvents: "none",
         }}
       />
 
-      {/* Árboles - capa delantera
       <Box
         sx={{
           position: "fixed",
-          bottom: 0,
-          left: 0,
-          width: "200vw",
-          height: "30vh",
-          backgroundImage: `url(${TREES_FRONT})`,
+          bottom: 200,
+          left: "calc(100vw + 400px)",
+          width: "370px", // más ancho para scroll horizontal
+          height: "380px",
+          backgroundImage: `url(${TREES_BACK2})`,
           backgroundRepeat: "repeat-x",
           backgroundSize: "cover",
-          transform: `translateX(-${treeOffsetFront}vw)`,
+          transform: `translateX(-${treeOffsetBack1}vw)`,
           transition: "transform 0.2s linear",
-          zIndex: 5, // justo debajo del cactus y el sol
+          zIndex: 8, // debajo del suelo
           pointerEvents: "none",
         }}
-      /> */}
+      />
+
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 200,
+          left: "calc(100vw + 400px)",
+          width: "300px", // más ancho para scroll horizontal
+          height: "310px",
+          backgroundImage: `url(${TREES_BACK2})`,
+          backgroundRepeat: "repeat-x",
+          backgroundSize: "cover",
+          transform: `translateX(-${treeOffsetBack3}vw)`,
+          transition: "transform 0.2s linear",
+          zIndex: 7, // debajo del suelo
+          pointerEvents: "none",
+        }}
+      />
+
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 200,
+          left: "calc(100vw + 600px)",
+          width: "470px", // más ancho para scroll horizontal
+          height: "480px",
+          backgroundImage: `url(${TREES_BACK})`,
+          backgroundRepeat: "repeat-x",
+          backgroundSize: "cover",
+          transform: `translateX(-${treeOffsetBack1}vw)`,
+          transition: "transform 0.2s linear",
+          zIndex: 9, // debajo del suelo
+          pointerEvents: "none",
+        }}
+      />
 
       <Box
         sx={{
