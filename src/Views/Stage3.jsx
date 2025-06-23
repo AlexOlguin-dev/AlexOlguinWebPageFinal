@@ -4,6 +4,7 @@ import SCROLLDOWN from "../assets/img/stage3_objects/scroll_down_logo.png";
 import CACTUS from '../assets/img/stage3_objects/cactus.png';
 import TREES_BACK from "../assets/img/stage3_objects/tree.png";
 import TREES_BACK2 from "../assets/img/stage3_objects/tree2.png";
+import CAR from '../assets/img/stage3_objects/car.png';
 
 const generateStars = (count, maxHeight) =>
   Array.from({ length: count }, () => ({
@@ -95,6 +96,10 @@ const Stage3 = () => {
   const TREES_START = 9000;
   const TREES_END = 25000;
 
+  const VERTICAL_LIFT_OFFSET = 1000; // cuánto después del tronco empieza a subir
+  const VERTICAL_LIFT_START = HORIZONTAL_END + VERTICAL_LIFT_OFFSET;
+  const VERTICAL_LIFT_END = VERTICAL_LIFT_START + 2500;
+
   const [scrollY, setScrollY] = useState(0);
   const [imageOpacity, setImageOpacity] = useState(0);
   const isFadingIn = useRef(true);
@@ -159,12 +164,26 @@ const Stage3 = () => {
 
   const treeScrollProgress = Math.min(
     Math.max((scrollY - TREES_START) / (TREES_END - TREES_START), 0),
+    horizontalProgress // los árboles no se moverán más que el tronco
+  );
+
+  const treeOffsetBack1 = treeScrollProgress * 290; // más lento
+  const treeOffsetBack2 = treeScrollProgress * 400; // más lento
+  const treeOffsetBack3 = treeScrollProgress * 550; // más lento
+
+  const treeLayers = [
+    { img: TREES_BACK, bottom: 180, left: "100vw", width: 490, height: 500, offset: treeOffsetBack2, z: 9 },
+    { img: TREES_BACK2, bottom: 200, left: "calc(100vw + 400px)", width: 370, height: 380, offset: treeOffsetBack1, z: 8 },
+    { img: TREES_BACK2, bottom: 200, left: "calc(100vw + 400px)", width: 300, height: 310, offset: treeOffsetBack3, z: 7 },
+    { img: TREES_BACK, bottom: 150, left: "calc(100vw + 600px)", width: 470, height: 480, offset: treeOffsetBack1, z: 9 },
+  ];
+
+  const verticalLiftProgress = Math.min(
+    Math.max((scrollY - VERTICAL_LIFT_START) / (VERTICAL_LIFT_END - VERTICAL_LIFT_START), 0),
     1
   );
 
-  const treeOffsetBack1 = treeScrollProgress * 80; // más lento
-  const treeOffsetBack2 = treeScrollProgress * 120; // más lento
-  const treeOffsetBack3 = treeScrollProgress * 160; // más lento
+  const liftY = verticalLiftProgress * 100; // en vh
 
   useEffect(() => {
     const prevOverflowX = document.body.style.overflowX;
@@ -279,12 +298,12 @@ const Stage3 = () => {
       <Box
         sx={{
           position: "fixed",
-          bottom: 0,
+          top: "calc(100vh - 30vh)",
           left: 0,
           width: "100vw",
-          height: "30vh",
+          height: "300vh",
           backgroundColor: "#280507",
-          transform: scrollY >= 6000 ? "translateY(0%)" : "translateY(100%)",
+          transform: scrollY >= 6000 ? `translateY(-${liftY}vh)` : "translateY(100%)",
           transition: "transform 1s ease-out",
           zIndex: 6,
         }}
@@ -298,11 +317,11 @@ const Stage3 = () => {
           left: "50%",
           transform: `
             ${scrollY >= 6500 ? "translate(-50%, 0)" : "translate(-50%, 100vh)"}
-            translateX(-${horizontalProgress * 80}vw)
+            translateX(-${horizontalProgress * (isMobile ? 120 : 80)}vw)
           `,
           transition: "transform 2s ease-out",
-          width: "400px",
-          height: "400px",
+          width: isMobile ? "300px" : "400px",
+          height: isMobile ? "300px" : "400px",
           backgroundColor: "#D6982B",
           borderRadius: "50%",
           zIndex: 5,
@@ -318,11 +337,10 @@ const Stage3 = () => {
         <Box
           sx={{
             fontFamily: '"Press Start 2P", monospace',
-            fontSize: "12px",
+            fontSize: isMobile ? "10px" : "12px",
             opacity: Math.min(Math.max((scrollY - 8000) / 800, 0), 1),
-            transition: "opacity 0.2s",
+            transition: "opacity 0.2s, transform 0.2s ease-out",
             color: "#280507",
-            transition: "transform 0.2s ease-out",
           }}
         >
           Akkuarios
@@ -330,18 +348,17 @@ const Stage3 = () => {
         <Box
           sx={{
             fontFamily: '"Press Start 2P", monospace',
-            fontSize: "10px",
+            fontSize: isMobile ? "8px" : "10px",
             opacity: Math.min(Math.max((scrollY - 8500) / 800, 0), 1),
-            transition: "opacity 0.2s",
+            transition: "opacity 0.2s, transform 0.2s ease-out",
             color: "#280507",
             marginTop: "10px",
             maxWidth: "90%",
-            transition: "transform 0.2s ease-out",
           }}
         >
-          Mis primeros proyectos fueron para la empresa independiente Akkuarios, donde desarrollé varios sistema de minado de datos web (Scrapping).
-          El software permitía a los usuarios extraer información de diversas fuentes en línea, facilitando la recopilación de datos para análisis posteriores.
-          Todo desarrollado en Python, con un enfoque en la eficiencia y la facilidad de uso.
+          Mis primeros proyectos fueron para la empresa independiente Akkuarios, donde desarrollé varios sistema de minado de datos web (Scrapping). 
+          El software permitía a los usuarios extraer información de diversas fuentes en línea, facilitando la recopilación de datos para análisis 
+          posteriores. Todo desarrollado en Python, con un enfoque en la eficiencia y la facilidad de uso.
         </Box>
       </Box>
 
@@ -373,133 +390,103 @@ const Stage3 = () => {
       />
 
       {/* Árboles - capa trasera */}
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: 180,
-          left: "100vw",
-          width: "490px", // más ancho para scroll horizontal
-          height: "500px",
-          backgroundImage: `url(${TREES_BACK})`,
-          backgroundRepeat: "repeat-x",
-          backgroundSize: "cover",
-          transform: `translateX(-${treeOffsetBack2}vw)`,
-          transition: "transform 0.2s linear",
-          zIndex: 9, // debajo del suelo
-          pointerEvents: "none",
-        }}
-      />
+      {treeLayers.map((tree, i) => {
+        const scale = isMobile ? 0.5 : 1;
+        return (
+          <Box
+            key={i}
+            sx={{
+              position: "fixed",
+              bottom: tree.bottom * scale,
+              left: tree.left,
+              width: `${tree.width * scale}px`,
+              height: `${tree.height * scale}px`,
+              backgroundImage: `url(${tree.img})`,
+              backgroundRepeat: "repeat-x",
+              backgroundSize: "cover",
+              transform: `
+                translateX(-${tree.offset}vw)
+                translateY(-${liftY}vh)
+              `,
+              transition: "transform 0.2s linear",
+              zIndex: tree.z,
+              pointerEvents: "none",
+            }}
+          />
+        );
+      })}
 
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: 200,
-          left: "calc(100vw + 400px)",
-          width: "370px", // más ancho para scroll horizontal
-          height: "380px",
-          backgroundImage: `url(${TREES_BACK2})`,
-          backgroundRepeat: "repeat-x",
-          backgroundSize: "cover",
-          transform: `translateX(-${treeOffsetBack1}vw)`,
-          transition: "transform 0.2s linear",
-          zIndex: 8, // debajo del suelo
-          pointerEvents: "none",
-        }}
-      />
-
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: 200,
-          left: "calc(100vw + 400px)",
-          width: "300px", // más ancho para scroll horizontal
-          height: "310px",
-          backgroundImage: `url(${TREES_BACK2})`,
-          backgroundRepeat: "repeat-x",
-          backgroundSize: "cover",
-          transform: `translateX(-${treeOffsetBack3}vw)`,
-          transition: "transform 0.2s linear",
-          zIndex: 7, // debajo del suelo
-          pointerEvents: "none",
-        }}
-      />
-
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: 150,
-          left: "calc(100vw + 600px)",
-          width: "470px", // más ancho para scroll horizontal
-          height: "480px",
-          backgroundImage: `url(${TREES_BACK})`,
-          backgroundRepeat: "repeat-x",
-          backgroundSize: "cover",
-          transform: `translateX(-${treeOffsetBack1}vw)`,
-          transition: "transform 0.2s linear",
-          zIndex: 9, // debajo del suelo
-          pointerEvents: "none",
-        }}
-      />
-
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: 0,
-          left: "calc(100vw)",
-          width: "470px", // más ancho para scroll horizontal
-          height: "100vh",
-          transform: `translateX(-${treeOffsetBack1}vw)`,
-          transition: "transform 0.2s linear",
-          zIndex: 9, // debajo del suelo
-          pointerEvents: "none",
-          backgroundColor: "#755a28"
-        }}
-      >
+      { !isMobile && (
         <Box
           sx={{
-            position: "absolute",
-            bottom: "calc(100% - 90%)",
-            left: "calc(100vw - 97.2vw)",
-            width: "85%",
-            height: "55%",
-            borderRadius: "50%",
-            backgroundColor: "#ebc278",
+            position: "fixed",
+            top: 0,
+            left: "135vw",
+            width: "400px",
+            height: "200vh",
+            backgroundColor: "#855f1b",
+            transform: `
+              translateX(-${horizontalProgress * 100}vw)
+              translateY(-${liftY}vh)
+            `,
+            transition: "transform 2s ease-out",
             zIndex: 10,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "40px 20px",
+            boxSizing: "border-box",
           }}
         >
           <Box
             sx={{
-              position: "absolute",
-              bottom: "calc(100% - 20%)",
-              left: "calc(100vw - 92vw)",
+              marginTop: "-600px",
+              width: "180px",
+              height: "180px",
+              backgroundColor: "#d6a345",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
               fontFamily: '"Press Start 2P", monospace',
-              fontSize: "12px",
-              color: "black",
-              transition: "transform 0.2s ease-out",
-              zIndex: 11
+              fontSize: "10px",
+              padding: "10px",
+              marginBottom: "30px",
             }}
           >
             Universidad UTEM
           </Box>
           <Box
             sx={{
-              position: "absolute",
-              bottom: "calc(100% - 60%)",
-              left: "calc(100vw - 95.5vw)",
-              width: "70%",
+              color: "#fff",
               fontFamily: '"Press Start 2P", monospace',
-              fontSize: "11px",
-              color: "black",
-              transition: "transform 0.2s ease-out",
-              zIndex: 11,
+              fontSize: "10px",
               textAlign: "justify",
+              maxWidth: "90%",
+              lineHeight: 1.6,
             }}
           >
-            Ayude con la construccion de la actualizacion del sistema de intranet de la universidad para gestion de alumnos y profesores, programado en Django con base de datos PostgreSQL.
+            Ayudé con la actualización de la plataforma intranet principal de la universidad la cual estaba desarrollada en Django con base de datos PostgreSQL, además de ayudar con las mantenciones de la página y apoyo en soporte técnico reparando errores reportados por el profesorado y alumnado.
           </Box>
         </Box>
-        
-      </Box>
+      )}
+
+      <Box
+        sx={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "#855f1b",
+          opacity: verticalLiftProgress,
+          transition: "opacity 0.3s ease",
+          zIndex: 20,
+          pointerEvents: "none",
+        }}
+      />
 
       <Box
         sx={{
